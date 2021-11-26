@@ -2,6 +2,8 @@
 
 A Python Console plugin for Yet Another Scientific Artificial Reality Application (YASARA)
 
+**MS Windows Version**.
+
 # Installation
 
 ## To install YASARA View:
