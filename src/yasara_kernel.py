@@ -1760,36 +1760,10 @@ def Exit():
 # AA -- Nov 2021 -- 
 # =================
 
-# Previous initialisation as required here.
-# STDERR is redirected to STDOUT
-sys.__stderr__=sys.__stdout__
-sys.stderr=sys.__stderr__
+from rpyc import connect
+  
+std_relay_service = connect("localhost", 18861)        
 
-
-from rpyc.utils.registry import UDPRegistryServer
-from rpyc import connect_by_service
-from rpyc.utils.server import ThreadedServer
-
-# Define the stdout relay service here
-
-class YasaraStdoutRelayService(rpyc.Service):
-    def exposed_stdout_relay(self, specific_command):
-        # TODO: HIGH, Check specific_command for str type.
-        sys.stdout.write(specific_command)
-        sys.stdout.flush()
-
-# Try to launch the registry server, if it is already running use it to discover the service.
-
-try:
-    reg_server = UDPRegistryServer()
-    serv = ThreadedServer(YasaraStdoutRelayService)
-    serv.start()
-except OSError as net_error:
-    pass
-    
-std_relay_service = rpyc.connect_by_service("YasaraStdoutRelay")        
-    
-    
 # AA -- Nov 2021 -- 
 # =================
 
@@ -1835,7 +1809,12 @@ if (opsys!="Windows"):
   if (info.st_mode&(stat.S_IROTH|stat.S_IWOTH)): permissions|=stat.S_IRWXO
 # DO WE HAVE AN INPUT FILE? (sys.argv[1] IS THE YASARA PROCESS ID)
 # IF NO INPUT FILE ID IS GIVEN, THE PLUGIN IS MOST LIKELY RUN MANUALLY TO CHECK FOR STARTUP ERRORS
+
+
 request="CheckIfDisabled"
+# request = "YaPyCon"
+
+
 if (len(sys.argv)>=2):
   inputfilename=os.path.join(plugin.path,"dat"+os.sep+"input_"+sys.argv[1]+".txt")
   if (os.path.exists(inputfilename)):
@@ -10043,19 +10022,19 @@ def StopLog():
   # ALWAYS GET A RETURN VALUE TO SYNCHRONIZE THREADS
   return(runretval(command[:-1],1))
 
-# STOP RUNNING PLUGIN
-# ===================
-def StopPlugin():
-  global std_relay_service, reg_server
+# # STOP RUNNING PLUGIN
+# # ===================
+# def StopPlugin():
+  # global std_relay_service, t
   
-  # Shutdown the "service"
-  std_relay_service.close()
-  # Shutdown the registry
-  reg_server.close()
+  # # Shutdown the "service"
+  # std_relay_service.close()
+  # # Shutdown the registry
+  # t.close()
   
     
-  command='StopPlugin '
-  return(runretval(command[:-1],retvalused()))
+  # command='StopPlugin '
+  # return(runretval(command[:-1],retvalused()))
 
 # SET GENERAL DISPLAY STYLE
 # =========================
