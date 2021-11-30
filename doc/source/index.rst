@@ -9,6 +9,8 @@ Welcome to YaPyCon's documentation!
 ``YaPyCon`` embeds a Python console and Jupyter Kernel in YASARA, *"...a molecular-graphics, -modeling and -simulation 
 program for Windows, Linux, MacOS and Android"*.
 
+.. figure:: resources/figures/fig_main_yapycon.png
+
 
 
 .. toctree::
@@ -20,6 +22,8 @@ program for Windows, Linux, MacOS and Android"*.
    devnotes
    
    moddoc
+   
+   api
 
 
 

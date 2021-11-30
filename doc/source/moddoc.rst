@@ -1,5 +1,18 @@
 .. _source_module_doc:
 
+===================================
+Original `yasara.py` docstring docs
+===================================
+
+.. note::
+    The material in this page is **not** part of ``YaPyCon`` documentation. It is built directly from the 
+    docstring of the ``yasara.py`` module that is included with every installation of YASARA (in the 
+    ``<YASARA_HOME_DIRECTORY>/plg`` directory). The docstring is re-formatted to reStructured text and slightly 
+    edited for better readability.
+    
+    It is included here as is because this information helps with the understanding of how YASARA's plugins work.
+
+
 Plugins - Extend YASARA with your own functions
 ===============================================
 
@@ -12,8 +25,8 @@ executed when you activate the respective option. Plugins are the ideal
 solution to add your own favorite functions to YASARA without having to
 play around with compilation, C and Assembler code.
 
-All plugins are collected in the yasara/plg subdirectory, for latest
-developments visit the plugin repository at <www.yasara.org/plugins>. In
+All plugins are collected in the ``yasara/plg`` subdirectory, for latest
+developments visit the plugin repository at www.yasara.org/plugins. In
 MacOS, you need to enter the context menu of the YASARA application in
 Finder and choose ‘show package contents’ to see the plugin folder.
 
@@ -84,7 +97,7 @@ Here is an example:
 
 ::
 
-       ""\"
+       """
        MainMenu: File
          PullDownMenu: Load
            SubMenu after PDB file from local PDB: PDB file from I_n_ternet
@@ -92,18 +105,22 @@ Here is an example:
                Text: Please input the four letter PDB ID code
                Text: _P_DB ID
              Request: DownloadPDB
-       ""\"
+       """
 
-The example above tells YASARA to: 1. Enter the main menu, search for
-entry ‘File’ (add it if not found). 2. Open a pull down menu, search for
-entry ‘Load’ (add it if not found). 3. Open a submenu (attached to the
-pull down menu), search for entry ‘PDB file from local PDB’, and add the
-new entry ‘PDB file from Internet’ immediately afterwards, with the ‘n’
-underlined. 4. Open a text input window with the header ‘Download PDB
-file from the web’, display a Download icon. 5. Within the text input
-window, print the text ‘Please input the four letter PDB ID code’. 6. On
-top of the first (and only) text input box, print the text ‘PDB ID’ with
-the ‘P’ underlined. 7. Run the plugin with the request ‘DownloadPDB’
+The example above tells YASARA to: 
+
+1. Enter the main menu, search for entry ‘File’ (add it if not found). 
+2. Open a pull down menu, search for entry ‘Load’ (add it if not found). 
+3. Open a submenu (attached to the pull down menu), search for entry 
+   "PDB file from local PDB", and add the new entry "PDB file from Internet" 
+   immediately afterwards, with the ‘n’ underlined. 
+4. Open a text input window with the header "Download PDB file from the web", 
+   display a Download icon. 
+5. Within the text input window, print the text "Please input the four letter 
+   PDB ID code". 
+6. On top of the first (and only) text input box, print the text "PDB ID" with
+   the "P" underlined. 
+7. Run the plugin with the request "DownloadPDB"
 
 The triple-quote comment may contain the following keywords to identify
 certain menu and window types:
@@ -122,6 +139,7 @@ Examples:
        MainMenu: File
        MainMenu after Effects: A_n_imations
        MainMenu before Analyze: _T_ools
+       
 
 AtomContextMenu - Add an option to the atom context menu
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

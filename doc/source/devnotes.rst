@@ -3,13 +3,10 @@ Developer Notes
 ===============
 
 
-The link between YASARA and Python
-==================================
+``YASARA`` Plugins
+===================
 
-* The full specification of the way YASARA communicates with Python plugins is available in :ref:`the original 
-  docstring docs of the yasara.py module <.. _source_module_doc:>`
-
-* YASARA publishes a `yasara.py` at `<YASARA_HOME_FOLDER>/plg` that plugins should import prior to executing any commands.
+* YASARA publishes a `yasara.py` at `<YASARA_HOME_DIRECTORY>/plg` that plugins should import prior to executing any commands.
 * `yasara.py` disguises itself as an API when it is really only two functions:
   * `runretval()` Or "Run and return a value"
   * `retvalused()` to receive a "traceback" object.
@@ -18,6 +15,16 @@ The link between YASARA and Python
 
 * When YASARA launches a plugin, it basically launches Python with the plugin file as an argument (as one process) and then pipes the standard streams
   back to the main process.
+
+
+
+
+The link between YASARA and Python
+==================================
+
+* The full specification of the way YASARA communicates with Python plugins is available in :ref:`the original 
+  docstring docs of the yasara.py module <.. _source_module_doc:>`
+
   
 * Open questions:
 

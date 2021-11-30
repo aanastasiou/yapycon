@@ -8,7 +8,7 @@
 
 """
 MainMenu: Window
-  PullDownMenu after Update frequency: PythonConsole
+  PullDownMenu after Update frequency: Python Console
     Request: YaPyCon
 """
 
