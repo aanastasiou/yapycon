@@ -1,0 +1,6 @@
+TODO List as of Tue 30 Nov 17:14:50 UTC 2021
+../src/yapycon.py:118 TODO: MID, Maybe have an option to turn the widget off and simply launch the kernel.
+../src/yasara_kernel.py:154 TODO: HIGH, Revise the accessibility of these functions.
+../src/yasara_kernel.py:185 TODO: HIGH, Review this function
+../src/yasara_kernel.py:205 TODO: HIGH, review whether to include these two functions
+../src/yasara_kernel.py:236 TODO: HIGH, Review whether to allow for Exit() to be used from the kernel

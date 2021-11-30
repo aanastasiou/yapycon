@@ -1,10 +1,20 @@
 """
-
 Callable functions from within the python console.
 
-This module is largely based on the original `yasara.py` module that can be found in a typical YASARA installation.
+Notes:    
+    * This module is largely based on the original `yasara.py` module by Elmar Krieger, that can be found in a typical 
+      YASARA installation.
+    * This module is *almost* identical to yasara.py.
+    * The key differences to its original source are:
+      * ``yasara_kernel`` does not include a number of functions that might lead to erroneous conditions (e.g. 
+        shutting down the plugin from the console or exiting Yasara).
+      * ``yasara_kernel.py`` uses the RPC proxied objects to initialise its own global variables such as:
+        * ``plugin, request, opsys, version, serialnumber, stage, owner, permissions, workdir, selection, com``
+      * ``yasara_kernel.py`` is updated to Python3 (to the extent that this is possible and practical).
+     
+    * By splitting the yasara module into two different modules, it is possible to control which functionality 
+      is accessible to users of the console and to an extent it is possible to update the code independently.       
 
-`yasara_kernel.py` is not identical to `yasara.py`
 
 :author: Athanasios Anastasiou
 :date: Nov 2021
@@ -141,6 +151,7 @@ def versionint(ver_str):
     return ver_str_components_int[0] * 10000 + ver_str_components_int[1] * 100 + ver_str_components_int[2]
 
 
+# TODO: HIGH, Revise the accessibility of these functions.
 # # RUN A YASARA COMMAND
 # # ====================
 # def run(command):
@@ -171,7 +182,7 @@ def cstr(text, quoted=False):
 # CONVERT SELECTION TO STRING
 # ===========================
 def selstr(selection):
-    # TODO: HIGH, Review this
+    # TODO: HIGH, Review this function
     if (type(selection) in [type(""), type(u""), type(1), type(1.)]):
         selstr = cstr(selection)
     else:
