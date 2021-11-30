@@ -2,7 +2,11 @@
 
 Callable functions from within the python console.
 
-:author: Athanasios Anastasiou (largely based on the original yasara.py module)
+This module is largely based on the original `yasara.py` module that can be found in a typical YASARA installation.
+
+`yasara_kernel.py` is not identical to `yasara.py`
+
+:author: Athanasios Anastasiou
 :date: Nov 2021
 """
 
@@ -517,6 +521,7 @@ plugin=plg_in(os.path.basename(sys.argv[0]))
 request=None
 com=None
 selection=[]
+
 # GET OPERATING SYSTEM AND FILE EXTENSION OF APPLICATIONS
 appext=""
 if (os.name.lower()=="nt"):
