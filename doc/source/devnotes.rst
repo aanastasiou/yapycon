@@ -2,6 +2,13 @@
 Developer Notes
 ===============
 
+1. Split the code in modules
+2. Update the code to only Python3 (python2 has been withdrawn even)
+3. Get rid of the retvalused hack
+4. Turn constants to CAPITALS
+5. Improve reporting errors from within YASARA to the plugin.
+6. Use f-strings as much as possible (speed-up)
+
 
 ``YASARA`` Plugins
 ===================

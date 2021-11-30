@@ -24,33 +24,67 @@ import threading
 from rpyc.utils.server import OneShotServer, ThreadedServer
 from rpyc import Service
 
-# Not applicable anymore 
-# def init_asyncio_patch():
-    # if sys.platform.startswith("win") and sys.version_info >=(3, 8) and tornado.version_info < (6, 1):
-        # import asyncio
-        # try:
-            # from asyncio import (
-            # WindowsProactorEventLoopPolicy,
-            # WindowsSelectorEventLoopPolicy)
-        # except ImportError:
-            # pass
-        # else:
-            # if type(asyncio.get_event_loop_policy()) is WindowsProactorEventLoopPolicy:
-                # asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
-                
-class YasaraStdoutRelayService(Service):
+              
+class YasaraContextRelayService(Service):
     """
     An rpyc service that re-uses the stdout of the plugin process.
     """
     def __init__(self):
         super().__init__()
         self._my_stream = sys.stdout
-        
+        self._plugin = yasara.plugin
+        self._request = yasara.request
+        self._opsys = yasara.opsys
+        self._version = yasara.version
+        self._serialnumber = yasara.serialnumber
+        self._stage = yasara.stage
+        self._owner = yasara.owner
+        self._permissions = yasara.permissions
+        self._workdir = yasara.workdir
+        self._selection = yasara.selection
+        self._com = yasara.com
+
+    def exposed_get_plugin(self):
+        return self._plugin
+
+    def exposed_get_request_str(self):
+        return self._request
+
+    def exposed_get_opsys(self):
+        return self._opsys
+
+    def exposed_get_version(self):
+        return self._version
+
+    def exposed_get_serialnumber(self):
+        return self._serialnumber
+
+    def exposed_get_stage(self):
+        return self._stage
+
+    def exposed_get_owner(self):
+        return self._owner
+
+    def exposed_get_permissions(self):
+        return self._permissions
+
+    def exposed_get_workdir(self):
+        return self._workdir
+
+    def exposed_get_selection(self):
+        return self._selection
+
+    def exposed_get_com(self):
+        return self._com
+
+
+
     def exposed_stdout_relay(self, payload):
         # sys.stdout.write(payload)
         # sys.stdout.flush()
         self._my_stream.write(payload)
         self._my_stream.flush()
+
     
 def start_rpc():
     """
@@ -59,16 +93,17 @@ def start_rpc():
     Notes:
         * Unfortunately this is required here because .start() of rpyc blocks
     """
-    
-    q = OneShotServer(YasaraStdoutRelayService(), port=18861)
+    global q
+    q = OneShotServer(YasaraContextRelayService(), port=18861, protocol_config={"allow_public_attrs": True})
     q.start()
+
     
 def stop():
     """
     Destructor callback for the kernel.
     """
+    global q
     q.close()
-    v.join()
     kernel_client.stop_channels()
     kernel_manager.shutdown_kernel()
     app.exit()    
@@ -76,9 +111,8 @@ def stop():
     
 v = None
 q = None
-if (yasara.request == "YaPyCon"):
+if yasara.request == "YaPyCon":
     app = guisupport.get_app_qt4()
-    
     # Launch RPC thread
     v = threading.Thread(target=start_rpc)
     v.start()
@@ -88,7 +122,7 @@ if (yasara.request == "YaPyCon"):
     kernel_manager.start_kernel()
     
     kernel = kernel_manager.kernel
-    kernel.gui='qt4'
+    kernel.gui = 'qt4'
     kernel_client = kernel_manager.client()
     kernel_client.start_channels()
     
