@@ -780,6 +780,8 @@ the Twinset):
        # List all objects without the Python wrapper 'ListObj("all")'
        yasara.run("ListObj all")
 
+.. _plugin_predef:
+
 Python plugins can access a number of predefined variables
 ----------------------------------------------------------
 
@@ -1395,7 +1397,7 @@ types of errors in Python plugins:
    started YASARA. Windows can unfortunately not display the error
    message, but you know that something went wrong because your plugin
    does not appear in YASARA’s user interface. Open a command prompt, go
-   to the yasara:raw-latex:`\plg `directory and run the plugin directly
+   to the yasara ``\plg`` directory and run the plugin directly
    with the Python interpreter to locate the problem:
 
 ::

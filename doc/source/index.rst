@@ -6,7 +6,7 @@
 Welcome to YaPyCon's documentation!
 ===================================
 
-``YaPyCon`` embeds a Python console and Jupyter Kernel in YASARA, *"...a molecular-graphics, -modeling and -simulation 
+``YaPyCon`` embeds a Python console (and Jupyter Kernel) in YASARA, *"...a molecular-graphics, -modeling and -simulation
 program for Windows, Linux, MacOS and Android"*.
 
 
@@ -20,6 +20,7 @@ program for Windows, Linux, MacOS and Android"*.
    
    installation
    functionality
+   examples
    devnotes
    
    moddoc
@@ -36,3 +37,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+

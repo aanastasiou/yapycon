@@ -4912,6 +4912,25 @@ def LoadNEF(filename, selection1, Class, nameformat):
 # LOAD PROTEIN DATA BANK FILE
 # ===========================
 def LoadPDB(filename, center=None, correct=None, model=None, download=None, seqres=None):
+    """
+    Loads a PDB file into YASARA.
+    
+    For much more detailed information, run ``Help LoadPDB`` in the YASARA console.
+    
+    :param filename: Filename of the PDB file or molecule ID if downloading from internet (see *download* parameter) 
+    :type filename: str
+    :param center: Either "Yes" or "No", aligns the center of the loaded molecule to the local coordinate system.
+    :type center: str
+    :param correct: Either "Yes" or "No", whether to attempt to correct errors after loading the model
+    :type correct: str
+    :param model: An integer denoting how many models to load from the provided filename.
+    :type model: int
+    :param download: Either "No", "Yes", "Latest", "PDBRedo", "Best" to determine whether and where to download from, 
+                     for more information about this please see the detailed help in YASARA.
+    :type download: str
+    :param seqres: Either "Yes" or "no", determines whether to read the protein sequence from the PDB file.
+    :type seqres: str
+    """
     command = 'LoadPDB '
     command += 'Filename=' + cstr(filename) + ','
     if (center != None): command += 'Center=' + cstr(center) + ','
@@ -4925,6 +4944,22 @@ def LoadPDB(filename, center=None, correct=None, model=None, download=None, seqr
 # LOAD IMAGE FROM PNG FILE
 # ========================
 def LoadPNG(filename, transcol, selection1):
+    """
+    Loads a PNG file **WITHIN** YASARA.
+    
+    Notes:
+        * For much more detailed information, run ``Help LoadPNG`` in the YASARA console.
+        * See also SavePNG
+    
+    :param filename: The fileame of the image to load, *relative to the current working directory of YASARA*
+    :type filename: str(path)
+    :param transcol: A colour specification that YASARA will turn to transparent, for more information please see 
+                     ``Help LoadPNG``.
+    :type transcol: str(colour name, RGBHex, ...)
+    :param selection1: An object selection number by which the image will be known to YASARA (please see help for more 
+                       information.
+    :type selection1: int
+    """
     command = 'LoadPNG '
     command += 'Filename=' + cstr(filename) + ','
     command += 'TransCol=' + cstr(transcol) + ','
@@ -4956,7 +4991,7 @@ def LoadSim(filename, assignsec=None):
     command = 'LoadSim '
     command += 'Filename=' + cstr(filename) + ','
     if (assignsec != None): command += 'assignSec=' + cstr(assignsec) + ','
-    return (runretval(command[:-1], True))
+    return runretval(command[:-1], True)
 
 
 # LOAD FORMATTED TABLE
@@ -4964,13 +4999,18 @@ def LoadSim(filename, assignsec=None):
 def LoadTab(filename, dimensions=None, columns=None, rows=None, pages=None):
     command = 'LoadTab '
     command += 'Filename=' + cstr(filename) + ','
-    if (dimensions != None): command += 'Dimensions=' + cstr(dimensions) + ','
-    if (columns != None): command += 'Columns=' + cstr(columns) + ','
-    if (rows != None): command += 'Rows=' + cstr(rows) + ','
-    if (pages != None): command += 'Pages=' + cstr(pages) + ','
+    if dimensions != None:
+        command += 'Dimensions=' + cstr(dimensions) + ','
+    if columns != None:
+        command += 'Columns=' + cstr(columns) + ','
+    if rows != None:
+        command += 'Rows=' + cstr(rows) + ','
+    if pages != None:
+        command += 'Pages=' + cstr(pages) + ','
     result = runretval(command[:-1], True)
-    if (result != None and len(result)): return (result[0])
-    return (result)
+    if result != None and len(result):
+        return result[0]
+    return result
 
 
 # LOAD DISTANCE, DIHEDRAL AND RDC RESTRAINTS IN XPLOR FORMAT
@@ -8398,6 +8438,14 @@ def ShowKBP(selection1, selection2, name=None, Type=None, size=None):
 # SHOW TEXT MESSAGE AT THE BOTTOM
 # ===============================
 def ShowMessage(text):
+    """
+    Displays a simple message to the user **within** YASARA.
+
+    :param text:
+    :type text: str
+
+
+    """
     command = 'ShowMessage '
     command += 'Text=' + cstr(text, 1) + ','
     return (runretval(command[:-1], True))
@@ -10411,6 +10459,14 @@ def ZoomAtom(selection1, steps=None, wait=None):
 # AA -- Nov 2021 --
 # =================
 
+def yapycon_get_connection_info():
+    """
+    Returns the connection info for the existing kernel. 
+    
+    Notes:
+        * This is useful information when trying to connect to an existing kernel.
+    """
+    return std_relay_service.root.get_connection_info()
 
 # INITIALIZE THE PLUGIN
 # =====================
