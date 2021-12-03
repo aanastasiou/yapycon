@@ -1,9 +1,9 @@
-========================
-Working with ``YaPyCon``
-========================
+=====================
+Launching ``YaPyCon``
+=====================
 
-The Python Console
-==================
+The YAsara PYthon COnsole (``YaPyCon``)
+=======================================
 
 Assuming an uneventful :ref:`installation process <install_quickstart>`, you can now launch ``YaPyCon``. This is
 identical to an IPython session, providing a Python language shell which executes Python directly.

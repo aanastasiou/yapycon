@@ -33,11 +33,8 @@ If everything has gone well, you will see a *"Python Console"* option added unde
 .. figure:: resources/figures/fig_showing_option.png
 
 
-
-
-
-Starting from scratch
-=====================
+Installing from scratch
+=======================
 
 A typical **full installation** process is divided into three parts:
 
@@ -47,17 +44,16 @@ Install ``YASARA``
 * Go to `this URL <http://www.yasara.org/viewdl.htm>`_ to download ``YASARA`` View. This is the entry level 
  ``YASARA`` and freely available.
  
- * You will soon receive an email with a unique URL that leads to an approximately 1GB installer.
- 
-   * This installation process is identical for all versions of ``YASARA``.
+ * You will soon receive an email with a unique URL that leads to an installer executable. This installation process is
+   identical for all "stages" of ``YASARA``.
    
 * The installer is a self-extracting executable that will install ``YASARA`` in a ``yasara/`` directory right 
   in the *Current Working Directory*. This installation location is referenced throughout the documentation as 
   ``<YASARA_HOME_DIRECTORY>``.
 
 * This installs the main piece of software but ``YASARA`` will attempt to pick up the *currently active* Python 
- interpreter. It is now important to ensure that the *"currently active"* Python interpreter has the necessary 
- pre-requisites installed. This is achieved in the following steps.
+  interpreter when it launches. It is now important to ensure that the *"currently active"* Python interpreter has the
+  necessary pre-requisites installed. This is achieved in the following steps.
      
 
 Install Python or virtual environment.

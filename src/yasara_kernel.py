@@ -22,11 +22,19 @@ Notes:
 
 import sys
 import os
-import time
 import socket
 import struct
-import stat
+import pickle
+
 from rpyc import connect
+
+try:
+    from matplotlib import pyplot as plt
+    MATPLOTLIB_AVAILABLE=True
+except ImportError:
+    MATPLOTLIB_AVAILABLE=False
+
+
 
 
 #  ======================================================================
@@ -5105,7 +5113,7 @@ def ListBond(selection1, selection2, results=None, lenmin=None):
     command += selstr(selection2) + ','
     if (results != None): command += 'Results=' + cstr(results) + ','
     if (lenmin != None): command += 'LenMin=' + cstr(lenmin) + ','
-    return (runretval(command[:-1], True))
+    return list(runretval(command[:-1], True))
 
 
 # LIST FLOATING ASSIGNMENTS (ALL OR SELECTED)
@@ -5295,6 +5303,30 @@ def ListRes(selection1, format=None, compress=None):
 # LIST SELECTION (ATOM)
 # =====================
 def ListAtom(selection1, format=None, compress=None):
+    """
+    Returns an array of atoms within a particular selection.
+
+    Notes:
+        * By default, only the YASARA atom IDs are returned. To change the amount of information
+          returned for each at, see the in-program help by running a ``Help Label`` from the YASARA console.
+        * See also ``yapycon_reformat_bondinfo_returned()`` for a convenience function to handle the return 
+          value of List functions.
+        * For more details on the parameters please do a ``Help ListAtom`` from within the YASARA console.
+          
+    :param selection1: A YASARA query expression.
+    :type selection1: str
+    :param format: A string containing specific attribute names to return. Returned values will conform to this 
+                   string *as strictly as possible*. For example, ``"ATOMNUM,    ATOMELEMENT"`` will result in a return
+                   value of ``128,    O`` (notice the exact number of spaces). For more information about the 
+                   attributes accepted in ``format`` please run a ``Help Label`` from the YASARA console.
+                   The attributes supported as of version 21.8.26 are: ``OBJNAME, OBJNUM, COMPOUND, MOLNAME, SEGNAME, 
+                   RES, RESNAME, RESName, RESNAME1, RESNUM, RESNUMWIC, ATOMNAME, ATOMNAMEPDB, ATOMNAMEPDB3, 
+                   ATOMNAMEIUPAC, ATOMNAMEXPLOR, ATOMNUM, ATOMELEMENT, ATOMElement, ATOMTYPE, CHARGE, CHIRALITYLD``
+    :type format: str
+    :param compress: Either "Yes" or "No", whether to apply a type of run-length compression to the returned results.
+                     For more detailed information, please run a ``Help ListAtom`` from the YASARA console.
+    :type compress: str
+    """
     command = 'ListAtom '
     command += selstr(selection1) + ','
 
@@ -5303,7 +5335,8 @@ def ListAtom(selection1, format=None, compress=None):
 
     if (compress != None):
         command += 'Compress=' + cstr(compress) + ','
-    return (runretval(command[:-1], True))
+        
+    return list(runretval(command[:-1], True))
 
 
 # SET LONG RANGE INTERACTIONS
@@ -6259,21 +6292,34 @@ def RaiseError(text=None):
 
 # CREATE RAYTRACED SCREENSHOT USING POVRAY
 # ========================================
-def RayTrace(filename, x=None, y=None, zoom=None, atoms=None, labelshadow=None, secalpha=None, display=None,
+def RayTrace(filename, x=None, y=None, 
+             zoom=None, atoms=None, labelshadow=None, 
+             secalpha=None, display=None,
              outline=None, background=None):
     command = 'RayTrace '
     command += 'Filename=' + cstr(filename) + ','
-    if (x != None): command += 'X=' + cstr(x) + ','
-    if (y != None): command += 'Y=' + cstr(y) + ','
-    if (zoom != None): command += 'zoom=' + cstr(zoom) + ','
-    if (atoms != None): command += 'Atoms=' + cstr(atoms) + ','
-    if (labelshadow != None): command += 'LabelShadow=' + cstr(labelshadow) + ','
-    if (secalpha != None): command += 'SecAlpha=' + cstr(secalpha) + ','
-    if (display != None): command += 'Display=' + cstr(display) + ','
-    if (outline != None): command += 'Outline=' + cstr(outline) + ','
-    if (background != None): command += 'Background=' + cstr(background) + ','
+    if x is not None: 
+        command += 'X=' + cstr(x) + ','
+    if y is not None: 
+        command += 'Y=' + cstr(y) + ','
+    if zoom is not None: 
+        command += 'zoom=' + cstr(zoom) + ','
+    if atoms is not None: 
+        command += 'Atoms=' + cstr(atoms) + ','
+    if labelshadow is not None: 
+        command += 'LabelShadow=' + cstr(labelshadow) + ','
+    if secalpha is not None: 
+        command += 'SecAlpha=' + cstr(secalpha) + ','
+    if display is not None: 
+        command += 'Display=' + cstr(display) + ','
+    if outline is not None: 
+        command += 'Outline=' + cstr(outline) + ','
+    if background is not None: 
+        command += 'Background=' + cstr(background) + ','
     # ALWAYS GET A RETURN VALUE TO SYNCHRONIZE THREADS
-    return (runretval(command[:-1], 1))
+    command_result = runretval(command[:-1], 1)
+
+    return yapycon_access_image_returned(filename, command_result)
 
 
 # CALCULATE RADIAL DISTRIBUTION FUNCTION
@@ -7111,12 +7157,35 @@ def SavePlot(filename, selection1, width, height, title, Type, xcolumn, ycolumn,
 # SAVE SCREENSHOT AS COMPRESSED PNG BITMAP
 # ========================================
 def SavePNG(filename, menu=None, depthmap=None):
+    """
+    Saves a simple screenshot of the current state of YASARA.
+    
+    Notes:
+        * ``SavePNG`` Does not work if YASARA runs in text or console mode, for more information please run a 
+          ``Help SavePNG`` and read the in-program documentation.
+        * If Matplotlib is installed on the activated environment, **the yasara_kernel function** returns the 
+          image as a numpy array.
+          
+    :param filename: Filename to save the screenshot at. By default, the current working directory is in variable
+                     ``workdir``
+    :type filename: str(path)
+    :param menu: Either "Yes" or "No", whether to include the menu and status bars in the screenshot.
+    :type menu: str
+    :param depthmap: Either "Yes" or "No", saves a grayscale image that represents the depth map of the current scene.
+    :type depthmap: str
+    
+    :returns: Numpy array if matplotlib available or the response from YASARA.
+    """ 
     command = 'SavePNG '
     command += 'Filename=' + cstr(filename) + ','
-    if (menu != None): command += 'Menu=' + cstr(menu) + ','
-    if (depthmap != None): command += 'DepthMap=' + cstr(depthmap) + ','
-    # ALWAYS GET A RETURN VALUE TO SYNCHRONIZE THREADS
-    return (runretval(command[:-1], 1))
+    if menu != None:
+        command += 'Menu=' + cstr(menu) + ','
+    if depthmap != None:
+        command += 'DepthMap=' + cstr(depthmap) + ','
+    # ALWAYS GET A RETURN VALUE TO SYNCHRONIZE TH
+    # READS
+    command_result = runretval(command[:-1], 1)
+    return yapycon_access_image_returned(filename, command_result) 
 
 
 # SAVE POVRAY SCENE DESCRIPTION
@@ -10468,6 +10537,118 @@ def yapycon_get_connection_info():
     """
     return std_relay_service.root.get_connection_info()
 
+
+def yapycon_reformat_atominfo_returned(atom_info, format, delim=","):
+    """
+    Reformats a list of atom information returned from certain YASARA's List... functions, taking into account the 
+    requested format.
+    
+    Notes: 
+        * This is a convenience function that re-packages the strings that are returned from YASARA to dictionaries
+          with the attribute names as keys and the return value marshaled to the right data type too.
+    
+    :param atom_info: A list of strings just as returned from a List command. For more information on attribute 
+                      names run a "Help ListAtom" from within YASARA.
+    :type atom_info: list
+    :param format: A delimited string with field names defining the returned format. As of YASARA version 21.8.26, the 
+                   marshalled attributes are ``RESNUMWIC, ATOMNUM, CHARGE``. For more information on the complete list
+                   please run a "Help Label" from within YASARA.
+    :type format: str
+    :param delim: The delimiter used to delimit attributes in format, the default is ``,``.
+    :type delim: str
+    
+    :returns: A list of dictionaries enabling fast lookups to the returned information.
+    :rtype: list[dict[attr, value]]
+    
+    :raises: TypeError if ``atom_info`` is not a list or if ``format`` is not a str, ValueError if ``format`` contains
+             duplicate attribute names.
+    """
+    atom_info_type = type(atom_info)
+    format_type = type(format)
+
+    if atom_info_type is not list:
+        raise TypeError(f"atom_info expected to be list, received {atom_info_type}")
+    if format_type is not str:
+        raise TypeError(f"format expected to be str, received {format_type}")
+    format_list = format.replace(" ", "").split(delim)
+    if len(format_list) != len(set(format_list)):
+        raise ValueError(f"Duplicate attribute names were found in format: {format}")
+    
+    # Type conversion lookup to marshall certain attributes in the right Python data type.
+    attr_to_type = {"RESNUMWIC": int,
+                    "ATOMNUM": int,
+                    "CHARGE": float,}
+
+    # Build a mapping key-->value where:
+    #   * Key is the result of the delimited attributes list from the format variable; and
+    #   * Value is the type converted result of the delimited attributes list from the returned information
+    #       * If a type conversion is possible, otherwise the value is the returned value itself.
+    return [dict(map(lambda x: (x[0],
+                                attr_to_type[x[0]](x[1])) if x[0] in attr_to_type else (x[0], x[1]),
+                 zip(format_list,
+                     an_item.replace(" ", "").split(",")))) for an_item in atom_info]
+
+
+def yapycon_reformat_bondinfo_returned(bond_info, num_of_results):
+    """
+    Reformats a list of (covalent) bond information returned from YASARA taking into account the requested format.
+
+    Notes:
+                     
+    :param bond_info:
+    :type bond_info:
+    :param num_of_results:
+    :type num_of_results: int
+    
+    :returns:
+    
+    :rtype:
+    """
+    bond_info_type = type(bond_info)
+    num_of_results_type = type(num_of_results)
+
+    if bond_info_type is not list:
+        raise TypeError(f"bond_info expected to be list, received {bond_info_type}")
+    if num_of_results_type is not int:
+        raise TypeError(f"num_of_results expected to be str, received {num_of_results_type}")
+    if not (1 <= num_of_results <= 4):
+        raise ValueError(f"num_of_results should take a value between 1 and 4, received: {num_of_results}")
+        
+    bond_attrs = ["atomnum_sel1", "atomnum_sel2", "bond_order", "bond_length"][0:num_of_results]
+
+    return [dict(zip(bond_attrs,
+                     bond_info[an_item_idx:(an_item_idx+num_of_results)])) for an_item_idx in range(0,
+                                                                                                    len(bond_info),
+                                                                                                    num_of_results)]
+
+def yapycon_access_image_returned(filename, current_retval=None):
+    """
+    Opens and returns an image as a numpy array
+    
+    Notes:
+        * This function is used throughout yasara_kernel wherever YASARA commands are returning images so that it is 
+          easier to plot them in a Jupyter control.
+    
+    :param filename: The graphics file that a particular command (e.g. SavePNG, RayTrace) produces
+    :type filename: str(path)
+    :param current_retval: The result of runretval for the command that produces the output.This guarantess that the
+                           image will have been saved and simplifies the re-usability of the function.
+    :type current_retval: list
+    :returns: A numpy array if Matplotlib is available and the file could be located or None otherwise
+    :rtype: numpy | None    
+    """
+    # YaPyCon Modification (Dec 2021)
+    # The following code is not part of yasara.py.
+    # It attempts to read the image in filename and
+    #  returns it to the command line where it can be
+    # plotted using matplotlib.
+    if MATPLOTLIB_AVAILABLE and os.path.exists(filename):
+        image_data = plt.imread(filename)
+    if image_data is not None:
+        return image_data
+    else:
+        return current_retval
+
 # INITIALIZE THE PLUGIN
 # =====================
 # Get the "bridge" to the already initialised module information.
@@ -10486,3 +10667,5 @@ workdir = std_relay_service.root.get_workdir()
 selection = std_relay_service.root.get_selection()
 com = std_relay_service.root.get_com()
 
+# Change the current working directory to the working directory of YASARA
+os.chdir(workdir)

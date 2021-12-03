@@ -8,6 +8,9 @@ Developer Notes
 4. Turn constants to CAPITALS
 5. Improve reporting errors from within YASARA to the plugin.
 6. Use f-strings as much as possible (speed-up)
+7. SaveWob does'nt work in View?
+8. SaveSTL as well as a number of other formats does not exist in the Python version.
+9. Because of the way the plugin is initialised, it is impossible to use sphinx to document it.
 
 
 ``YASARA`` Plugins

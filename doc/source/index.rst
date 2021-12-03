@@ -21,15 +21,12 @@ program for Windows, Linux, MacOS and Android"*.
    installation
    functionality
    examples
-   devnotes
-   
-   moddoc
-   
    api
 
+   devnotes
    current_todos
 
-
+   moddoc
 
 Indices and tables
 ==================
