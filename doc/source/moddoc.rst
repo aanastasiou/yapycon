@@ -1,8 +1,11 @@
 .. _source_module_doc:
 
-===================================
-Original `yasara.py` docstring docs
-===================================
+========
+Appendix
+========
+
+YASARA Plugins
+==============
 
 .. note::
     The material in this page is **not** part of ``YaPyCon`` per se.
@@ -18,10 +21,10 @@ Original `yasara.py` docstring docs
     plugins work.
 
 Plugins - Extend YASARA with your own functions
-===============================================
+-----------------------------------------------
 
 Plugins allow you to add your own menu options
-----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A YASARA plugin is a Python script or *Yanaconda macro* that
 adds menu options and windows to the YASARA user interface and gets
@@ -35,7 +38,7 @@ MacOS, you need to enter the context menu of the YASARA application in
 Finder and choose ‘show package contents’ to see the plugin folder.
 
 Plugins can be written in Yanaconda or Python
----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Even though YASARA has its own *built-in macro language*,
 there are some applications where *Yanaconda macros* cannot
@@ -50,7 +53,7 @@ context menu of the YASARA application in Finder and choose *"show
 package contents"* to see the plugin folder).
 
 Python can be downloaded from ``www.python.org``
-------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you are a Linux or MacOS user, Python is already present. If you are
 running Windows, it depends on your installation. Try to click Help >
@@ -60,7 +63,7 @@ already installed.
 If you are new to Python, you can `find a tutorial here <http://docs.python.org/tut/tut.html>`_.
 
 Plugins must stick to format conventions
-----------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 All plugins must be stored in YASARA’s ``<YASARA_HOME_DIRECTORY>/plg/`` subdirectory (in
 MacOS, this folder can be found at ``YASARA.app/yasara/plg``).
@@ -69,7 +72,7 @@ Look at some of the files present there and pick the one closest to your needs a
 programming scaffold.
 
 The header identifies a plugin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The first line of a YASARA Python plugin must always read ``# YASARA PLUGIN``.
 Adapt the remaining fields to describe your plugin. This
@@ -88,7 +91,7 @@ credits. Go to www.yasara.org/contribute to submit your plugin.
        #
 
 The menu structure is enclosed in a triple-quote comment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After the header, the plugin specifies where to add which entries to
 YASARA’s user interface to make selections and run the plugin. These
@@ -262,7 +265,7 @@ In Python, the jth ``object descriptor<Odiso>`` in the ith selection
 window can be accessed as ``yasara.selection[i].object[j]<Ppcaanopv>``,
 while Yanaconda stores a simple object selection string in
 ``selection(i)<Ypcaanopv>``, which can be passed to YASARA commands
-directly, e.g. to to obtain an object list. Note that counting for ‘i’
+directly, e.g. to to obtain an object list. Note that counting for ‘i’
 starts at 0 in Python and 1 in Yanaconda.
 
 Example:
@@ -284,7 +287,7 @@ In Python, the jth ``molecule descriptor<Mdism>`` in the ith selection
 window can be accessed as
 ``yasara.selection[i].molecule[j]<Ppcaanopv>``, while Yanaconda stores a
 simple molecule selection string in ``selection(i)<Ypcaanopv>``, which
-can be passed to YASARA commands directly, e.g. to to obtain a molecule
+can be passed to YASARA commands directly, e.g. to to obtain a molecule
 list. Note that counting for ‘i’ starts at 0 in Python and 1 in
 Yanaconda.
 
@@ -308,7 +311,7 @@ In Python, the jth ``residue descriptor<Rdisr>`` in the ith selection
 window can be accessed as ``yasara.selection[i].residue[j]<Ppcaanopv>``,
 while Yanaconda stores a simple residue selection string in
 ``selection(i)<Ypcaanopv>``, which can be passed to YASARA commands
-directly, e.g. to to obtain a residue list. Note that counting for ‘i’
+directly, e.g. to to obtain a residue list. Note that counting for ‘i’
 starts at 0 in Python and 1 in Yanaconda.
 
 Example:
@@ -330,7 +333,7 @@ In Python, the jth ``atom descriptor<Adisa>`` in the ith selection
 window can be accessed as ``yasara.selection[i].atom[j]<Ppcaanopv>``,
 while Yanaconda stores a simple atom selection string in
 ``selection(i)<Ypcaanopv>``, which can be passed to YASARA commands
-directly, e.g. to to obtain an atom list. Note that counting for ‘i’
+directly, e.g. to to obtain an atom list. Note that counting for ‘i’
 starts at 0 in Python and 1 in Yanaconda.
 
 Example:
@@ -367,7 +370,7 @@ Example for a window with two text input boxes:
          Text: _D_escription part 2 (header for the second input box), Default text
 
 Note in the last line that a default text can be provided, separated
-with a comma ‘,’. If the default is not always the same (e.g. a
+with a comma ‘,’. If the default is not always the same (e.g. a
 username), you can use ‘TextFile:’ instead of ‘Text:’ to
 ``read the data from a file as described here<ListWindow>``. This file
 must then be created
@@ -631,11 +634,11 @@ radio button selection, and a single button (usually named ‘OK’). This
 limitation does not apply to the command.
 
 The layout for the remaining plugin differs between Python and Yanaconda
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When using Yanaconda, the rest of the plugin is a straightforward macro.
 The variable ‘request’ contains the specified request,
-e.g. ‘DownloadPDB’ and can be used to execute different parts of the
+e.g. ‘DownloadPDB`’ and can be used to execute different parts of the
 macro. Selections can currently not be accessed.
 
 When using Python, the first command must be
@@ -647,7 +650,7 @@ When using Python, the first command must be
 Immediately afterwards, you can access the data passed to the plugin as
 well as call YASARA functions. The predefined variables are listed
 below, the most important one is yasara.request, a string indentifying
-the user’s request, as specified after ‘Request:’, e.g. ‘DownloadPDB’.
+the user’s request, as specified after ‘Request:’, e.g. ‘DownloadPDB’.
 When YASARA registers the plugins during startup, it also sends a
 ‘CheckIfDisabled’ request, giving the plugin the possibility to exclude
 itself from registration.
@@ -687,7 +690,7 @@ Also note that you cannot run YASARA commands when handling the
 user interface is created.
 
 Plugins can be rerun quickly by pressing Alt or Tab
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Many YASARA commands can be repeated by
 ``holding down Alt or Tab and clicking on an atom<Editing>``. This
@@ -698,7 +701,7 @@ YASARA will display a message at the bottom which is derived by
 splitting the ‘Request’ keyword at capital letters.
 
 Plugins can access most YASARA functions
-----------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For Yanaconda plugins this is trivial, as they are just macros. For
 Python plugins, the YASARA functions are wrapped so that they can be
@@ -722,7 +725,7 @@ capitalization is often ambiguous and hard to remember, raising the
 error rate.
 
 The documentation page of each YASARA command lists the prototype of the
-corresponding Python function, e.g. the command (look at the ‘Python:’
+corresponding Python function, e.g. the command (look at the ‘Python:’
 row in the table at the top of each page).
 
 A few YASARA commands support more than one format with different
@@ -828,7 +831,7 @@ counting starts at 0 in every selection window.
        yasara.selection[i].filename[j]    | The jth selected filename in the ith selection window
 
 Object descriptors identify selected objects
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Object descriptors are instances of the class obj_descriptor. Typically,
 you loop over all object descriptors in the ith selection window:
@@ -853,7 +856,7 @@ You could then color the object red:
        yasara.ColorObj(object.number.inyas,"Red")
 
 Molecule descriptors identify selected molecules
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Molecule descriptors are instances of the class mol_descriptor.
 Typically, you loop over all molecule descriptors in the ith selection
@@ -887,7 +890,7 @@ Or delete the entire object containing this molecule:
        yasara.DelObj(molecule.object.number.inyas)
 
 Residue descriptors identify selected residues
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Residue descriptors are instances of the class res_descriptor.
 Typically, you loop over all residue descriptors in the ith selection
@@ -925,7 +928,7 @@ Or display a ribbon for the entire molecule containing this residue:
        yasara.ShowSecMol(residue.molecule.number.inyas,"Ribbon")
 
 Atom descriptors identify selected atoms
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Atom descriptors are instances of the class atom_descriptor. Typically,
 you loop over all atom descriptors in the ith selection window:
@@ -1163,7 +1166,7 @@ you do not need the return value, consider putting the command between
 brackets [..], which is a good way to indicate that synchronization is
 requested. Here are three typical examples:
 
--  ``The plugin reads a file created by YASARA``: Since this is a common
+*  ``The plugin reads a file created by YASARA``: Since this is a common
    task, all YASARA commands that save data to the hard disk are
    synchronized automatically. The only exception is the LogAs command:
 
@@ -1179,7 +1182,7 @@ requested. Here are three typical examples:
        # Read the log file in Python
        log=open("MyLog").readlines()
 
--  ``YASARA reads a file created by the plugin``: This is normally not a
+*  ``YASARA reads a file created by the plugin``: This is normally not a
    problem, unless the file is a temporary one, and the plugin decides
    to delete it. In this case, the plugin must wait for YASARA to read
    the file before deleting it:
@@ -1220,8 +1223,8 @@ which avoids synchronization issues:
        except:
          yasara.ShowMessage("Could not initialize simulation")
 
-Plugins can be speeded up
--------------------------
+Plugins can be sped up
+----------------------
 
 Normally YASARA executes each command issued by the plugin just as if it
 had been created via the graphical user interface. This includes an
@@ -1281,7 +1284,7 @@ and commands:
        # Run the plugin plg/MyPlugin.py
        RunPlugin MyPlugin.py
 
-You can put the code above into a macro, e.g. ‘runplugin.mcr’ and run it
+You can put the code above into a macro, e.g. ‘runplugin.mcr’ and run it
 from the command line:
 
 ::
@@ -1330,7 +1333,7 @@ that can be achieved with these steps:
 2. Use Java(-Script) on your webpage to check if this Python module is
    listening, connect to it if yes, and send YASARA control instructions
    that reflect what the user does in the browser. If the Python module
-   is not listening, your webpage may start YASARA first, e.g. via the
+   is not listening, your webpage may start YASARA first, e.g. via the
    MIME-type setting if your browser’s security settings don’t allow to
    launch an external program.
 
@@ -1358,7 +1361,7 @@ example ‘yasara/pym/3dmcommunicator.py’. Also note that ‘yasara.request’
 needs to be passed to your Python module, in the example as the first
 command line parameter.
 
-4. In your Python module (e.g. yasara/pym/3dmcommunicator.py) you need
+4. In your Python module (e.g. ``yasara/pym/3dmcommunicator.py``) you need
    to connect to the YASARA instance that launched the module, so that
    you can send it YASARA commands. This is done with the following
    code:

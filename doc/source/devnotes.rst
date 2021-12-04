@@ -13,8 +13,8 @@ Developer Notes
 9. Because of the way the plugin is initialised, it is impossible to use sphinx to document it.
 
 
-``YASARA`` Plugins
-===================
+YASARA Plugins
+==============
 
 * YASARA publishes a `yasara.py` at `<YASARA_HOME_DIRECTORY>/plg` that plugins should import prior to executing any commands.
 * `yasara.py` disguises itself as an API when it is really only two functions:

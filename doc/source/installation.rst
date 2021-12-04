@@ -1,6 +1,6 @@
-======================
-Installing ``YaPyCon``
-======================
+============
+Installation
+============
 
 
 .. _install_quickstart:
@@ -10,10 +10,10 @@ Quickstart
 
 Read this section if:
 
-* You already have a working ``YASARA`` installation
+* You already have a working YASARA installation
 * You already know what *"Python"* and *"virtual environment"* are 
-  and you can start ``YASARA`` with a specific virtual environment activated first.
-* You already know how ``YASARA`` plugins work and where to install them.
+  and you can start YASARA with a specific virtual environment activated first.
+* You already know how YASARA plugins work and where to install them.
 
 
 Installation
@@ -21,12 +21,12 @@ Installation
 
 1. Copy ``src/yapycon.py`` and ``src/yasara_kernel.py`` to ``<YASARA_HOME_DIRECTORY>/plg/``
    
-   * This step does make ``YASARA`` aware of the plugin but for ``YaPyCon`` to work properly, it needs to operate within 
+   * This step does make YASARA aware of the plugin but for ``YaPyCon`` to work properly, it needs to operate within
      a virtual environment that provides it with the necessary pre-requsites. This is achieved in the next steps.
      
 2. Create a virtual environment and install ``requirements.txt``
 
-3. Drop to a *terminal*, activate the environment and launch ``YASARA``
+3. Drop to a *terminal*, activate the environment and launch YASARA
 
 If everything has gone well, you will see a *"Python Console"* option added under the *"Window"* menu option:
 
@@ -38,20 +38,20 @@ Installing from scratch
 
 A typical **full installation** process is divided into three parts:
 
-Install ``YASARA`` 
-------------------
+Install YASARA
+--------------
 
-* Go to `this URL <http://www.yasara.org/viewdl.htm>`_ to download ``YASARA`` View. This is the entry level 
- ``YASARA`` and freely available.
+* Go to `this URL <http://www.yasara.org/viewdl.htm>`_ to download YASARA View. This is the entry level
+ YASARA and freely available.
  
  * You will soon receive an email with a unique URL that leads to an installer executable. This installation process is
-   identical for all "stages" of ``YASARA``.
+   identical for all "stages" of YASARA.
    
-* The installer is a self-extracting executable that will install ``YASARA`` in a ``yasara/`` directory right 
+* The installer is a self-extracting executable that will install YASARA in a ``yasara/`` directory right
   in the *Current Working Directory*. This installation location is referenced throughout the documentation as 
   ``<YASARA_HOME_DIRECTORY>``.
 
-* This installs the main piece of software but ``YASARA`` will attempt to pick up the *currently active* Python 
+* This installs the main piece of software but YASARA will attempt to pick up the *currently active* Python
   interpreter when it launches. It is now important to ensure that the *"currently active"* Python interpreter has the
   necessary pre-requisites installed. This is achieved in the following steps.
      
@@ -77,7 +77,7 @@ Install Python or virtual environment.
 Install the ``YaPyCon`` plugin
 ------------------------------
 
-If your system now includes a working ``YASARA`` installation with a properly prepared virtual environment, you are 
+If your system now includes a working YASARA installation with a properly prepared virtual environment, you are
 now ready to install and launch ``YaPyCon``.
 
 The steps to do this are identical to the description in :ref:`install_quickstart`
