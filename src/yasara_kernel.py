@@ -26,7 +26,7 @@ import socket
 import struct
 import pickle
 
-from rpyc import connect
+import rpyc
 
 try:
     from matplotlib import pyplot as plt
@@ -10652,20 +10652,23 @@ def yapycon_access_image_returned(filename, current_retval=None):
 # INITIALIZE THE PLUGIN
 # =====================
 # Get the "bridge" to the already initialised module information.
-std_relay_service = connect("localhost", 18861)
-
-# Retrieve the variables that have already been initialised 
-plugin = std_relay_service.root.get_plugin()
-request = std_relay_service.root.get_request_str()
-opsys = std_relay_service.root.get_opsys()
-version = std_relay_service.root.get_version()
-serialnumber = std_relay_service.root.get_serialnumber()
-stage = std_relay_service.root.get_stage()
-owner = std_relay_service.root.get_owner()
-permissions = std_relay_service.root.get_permissions()
-workdir = std_relay_service.root.get_workdir()
-selection = std_relay_service.root.get_selection()
-com = std_relay_service.root.get_com()
-
-# Change the current working directory to the working directory of YASARA
-os.chdir(workdir)
+try:
+    std_relay_service = rpyc.connect("localhost", 18861)
+    
+    # Retrieve the variables that have already been initialised 
+    plugin = std_relay_service.root.get_plugin()
+    request = std_relay_service.root.get_request_str()
+    opsys = std_relay_service.root.get_opsys()
+    version = std_relay_service.root.get_version()
+    serialnumber = std_relay_service.root.get_serialnumber()
+    stage = std_relay_service.root.get_stage()
+    owner = std_relay_service.root.get_owner()
+    permissions = std_relay_service.root.get_permissions()
+    workdir = std_relay_service.root.get_workdir()
+    selection = std_relay_service.root.get_selection()
+    com = std_relay_service.root.get_com()
+    
+    # Change the current working directory to the working directory of YASARA
+    os.chdir(workdir)
+except ConnectionRefusedError:
+    pass

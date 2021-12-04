@@ -12,12 +12,16 @@ MainMenu: Window
     Request: YaPyCon
 """
 
-import yasara
+try:
+    import yasara
+except ImportError:
+    pass
+
+import sys
+import threading
 from qtconsole.rich_jupyter_widget import RichIPythonWidget
 from qtconsole.inprocess import QtInProcessKernelManager
 from IPython.lib import guisupport
-import sys
-import threading
 from rpyc.utils.server import OneShotServer, ThreadedServer
 from rpyc import Service
 
@@ -118,52 +122,62 @@ class RpcServerThread(threading.Thread):
         # Stop server is called from the main thread effectively terminating RpcServerThread
         self._serv_object.close()
 
+def yapycon_launch_plugin(plugin_request):
+    """
+    Handles the initialisation and launching of the YaPyCon plugin.
 
-# TODO: HIGH, intercept "CheckIfDisabled" and return an informative message to YASARA if the console cannot be launched.
-if yasara.request == "YaPyCon":
-    # Create the qt handle for the console "app".
-    app = guisupport.get_app_qt4()
+    :param plugin_request: The request string sent by YASARA when the plugin is launched.
+    :type plugin_request: str
+    """
+    # TODO: HIGH, intercept "CheckIfDisabled" and return an informative message to YASARA if the console cannot be launched.
+    if plugin_request == "YaPyCon":
+        # Create the qt handle for the console "app".
+        app = guisupport.get_app_qt4()
 
-    # Create the kernel "process"
-    # NOTE: QtKernelManager works too (In addition it also generates a proper key)
-    # TODO: MID, Add an option to be able to just launch the kernel without creating the widget.
-    kernel_manager = QtInProcessKernelManager()
-    kernel_manager.start_kernel()
-    
-    # Create the client "process"
-    kernel = kernel_manager.kernel
-    kernel.gui = "qt"
-    kernel_client = kernel_manager.client()
-    kernel_client.start_channels()
+        # Create the kernel "process"
+        # NOTE: QtKernelManager works too (In addition it also generates a proper key)
+        # TODO: MID, Add an option to be able to just launch the kernel without creating the widget.
+        kernel_manager = QtInProcessKernelManager()
+        kernel_manager.start_kernel()
 
-    # This creates the widget (which is not strictly necessary for the kernel)
-    control = RichIPythonWidget()
-    control.kernel_manager = kernel_manager
-    control.kernel_client = kernel_client
-    # Connect the fact that exit was requested to closing the window
-    control.exit_requested.connect(app.quit)
-    # Widget goes to visible
-    control.show()
-    # Write the connection file
-    kernel_manager.write_connection_file()
+        # Create the client "process"
+        kernel = kernel_manager.kernel
+        kernel.gui = "qt"
+        kernel_client = kernel_manager.client()
+        kernel_client.start_channels()
 
-    # Launch RPC thread
-    # NOTE: This is delayed for so long to be able to "catch" the connection info
-    # TODO: LOW, Reduce the use of global variables in RpcServerThread
-    rpc_serv = RpcServerThread(connection_info=kernel_manager.connection_file)
-    rpc_serv.start()
+        # This creates the widget (which is not strictly necessary for the kernel)
+        control = RichIPythonWidget()
+        control.kernel_manager = kernel_manager
+        control.kernel_client = kernel_client
+        # Connect the fact that exit was requested to closing the window
+        control.exit_requested.connect(app.quit)
+        # Widget goes to visible
+        control.show()
+        # Write the connection file
+        kernel_manager.write_connection_file()
 
-    # Start the event loop
-    # This starts the console and blocks until the user closes the window of the application.
-    guisupport.start_event_loop_qt4(app)
-    # Application is shutting down.
-    # Stop the RPC "bridge"
-    # The rpyc ThreadedServer is "closed", this causes .start() in the thread's run()  to return, effectively
-    # unblocking (and terminating) the thread.
-    rpc_serv.stop_server()
-    # Stop the client
-    kernel_client.stop_channels()
-    # Shutdown the kernel
-    kernel_manager.shutdown_kernel()
-    # Signal the end of the plugin and get back to YASARA
-    yasara.plugin.end()
+        # Launch RPC thread
+        # NOTE: This is delayed for so long to be able to "catch" the connection info
+        # TODO: LOW, Reduce the use of global variables in RpcServerThread
+        rpc_serv = RpcServerThread(connection_info=kernel_manager.connection_file)
+        rpc_serv.start()
+
+        # Start the event loop
+        # This starts the console and blocks until the user closes the window of the application.
+        guisupport.start_event_loop_qt4(app)
+        # Application is shutting down.
+        # Stop the RPC "bridge"
+        # The rpyc ThreadedServer is "closed", this causes .start() in the thread's run()  to return, effectively
+        # unblocking (and terminating) the thread.
+        rpc_serv.stop_server()
+        # Stop the client
+        kernel_client.stop_channels()
+        # Shutdown the kernel
+        kernel_manager.shutdown_kernel()
+        # Signal the end of the plugin and get back to YASARA
+        yasara.plugin.end()
+
+
+if __name__ == "__main__":
+    yapycon_launch_plugin(yasara.request)
