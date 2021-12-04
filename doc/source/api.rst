@@ -6,18 +6,13 @@ Plugin code
 ``yapycon.py``
 ==============
 
-This section includes the entirety of the main plugin code
-with all of its explanatory inline comments.
-
-.. .. literalinclude:: ../../src/yapycon.py
-
-.. automodule:: src.yapycon
+.. automodule:: yapycon.yapycon
     :members: YasaraContextRelayService, RpcServerThread
 
 ``yasara_kernel.py``
 ====================
 
-.. automodule:: src.yasara_kernel
+.. automodule:: yapycon.yasara_kernel
     :members: yapycon_get_connection_info,
               yapycon_reformat_atominfo_returned,
               yapycon_reformat_bondinfo_returned,
