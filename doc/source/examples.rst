@@ -10,9 +10,9 @@ Examples
 This is perhaps the simplest way to interact with YASARA and get it to display a simple message.
 This can be achieved as follows:
 
-.. literalinclude :: resources/code_examples/yapycon_hello_world.py
+.. literalinclude:: resources/code_examples/yapycon_hello_world.py
 
-.. figure:: resources/figures/fig_hello_world.png
+.. thumbnail:: resources/figures/fig_hello_world.png
 
 
 Accessing YASARA's pre-defined variables for plugins
@@ -60,7 +60,7 @@ feel free to skip that part.
 
 If everything has gone well, you are probably looking at something like this:
 
-.. figure:: resources/figures/fig_example_savepng.png
+.. thumbnail:: resources/figures/fig_example_savepng.png
 
 It is worth noting at this point that *SavePNG* works differently than the standard ``yasara`` module, ``SavePNG``
 function. Normally, ``SavePNG()`` would return the result of the command, but when you load ``yasara_kernel``, the
@@ -84,7 +84,7 @@ This script will produce the following animated gif:
 
 Exporting data in different formats
 ===================================
-When YASARA loads a molecule from one of the standard file formats, it performs a large number of sanity checks on
+When YASARA loads a molecule from one of the standard file formats, it performs a few standard sanity checks [#]_ on
 the data about the atoms and (more importantly) the bonds of that molecule.
 
 Fortunately, all of this information is available to plugin developers.
@@ -104,7 +104,7 @@ a graph and visualising it.
 
 
 .. note ::
-    To successfully run the following code, you need to include ``networkx`` to your activated Python environment.
+    The following code, requires the module ``networkx`` to be installed in the activated Python environment.
 
     ``networkx`` can be installed from PyPi via a simple: ``pip install networkx``.
 
@@ -116,4 +116,16 @@ directed algorithm to provide a simple rendering of the network data.
 
 In this rendering (available below), each node is labeled with the atom's element:
 
-.. figure:: resources/figures/fig_example_net_rend.png
+.. thumbnail:: resources/figures/fig_example_net_rend.png
+
+It is worth noting here that the above graph representation includes **only the covalent bonds** of a molecule.
+
+YASARA *does* provide functions to "list" (i.e, to retrieve information about) "bonds" and interactions of different
+types (e.g. hydrogen bonds, hydrophobic interactions, pi-pi interactions and others) that contribute to the tertiary
+structure of a given molecule but this functionality is *not available at the YASARA View stage*.
+
+
+
+.. [#] Sanity checks are applied at different levels and "stages". The entry level stage, YASARA View, preforms 4
+       standard checks as part of the ``LoadPDB`` command but the ``Clean`` command of the YASARA Model stage, performs
+       39 checks to counteract a variety of known data quality issues.
