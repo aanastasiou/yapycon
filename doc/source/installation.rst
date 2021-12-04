@@ -30,7 +30,7 @@ Installation
 
 If everything has gone well, you will see a *"Python Console"* option added under the *"Window"* menu option:
 
-.. figure:: resources/figures/fig_showing_option.png
+.. thumbnail:: resources/figures/fig_showing_option.png
 
 
 Installing from scratch
@@ -42,7 +42,7 @@ Install YASARA
 --------------
 
 * Go to `this URL <http://www.yasara.org/viewdl.htm>`_ to download YASARA View. This is the entry level
- YASARA and freely available.
+  YASARA and freely available.
  
  * You will soon receive an email with a unique URL that leads to an installer executable. This installation process is
    identical for all "stages" of YASARA.

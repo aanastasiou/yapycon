@@ -10,7 +10,7 @@ Welcome to YaPyCon's documentation!
 program for Windows, Linux, MacOS and Android"*.
 
 
-.. figure:: resources/figures/fig_main_yapycon.png
+.. thumbnail:: resources/figures/fig_main_yapycon.png
 
 
 
