@@ -1,8 +1,8 @@
-TODO List as of Fri 3 Dec 17:23:32 UTC 2021
-../src//yapycon.py:122 TODO: HIGH, intercept "CheckIfDisabled" and return an informative message to YASARA if the console cannot be launched.
-../src//yapycon.py:129 TODO: MID, Add an option to be able to just launch the kernel without creating the widget.
-../src//yapycon.py:152 TODO: LOW, Reduce the use of global variables in RpcServerThread
-../src//yasara_kernel.py:162 TODO: HIGH, Revise the accessibility of these functions.
-../src//yasara_kernel.py:193 TODO: HIGH, Review this function
-../src//yasara_kernel.py:213 TODO: HIGH, review whether to include these two functions
-../src//yasara_kernel.py:244 TODO: HIGH, Review whether to allow for Exit() to be used from the kernel
+TODO List as of Sat 4 Dec 16:51:31 UTC 2021
+../yapycon//yapycon.py:132 TODO: HIGH, intercept "CheckIfDisabled" and return an informative message to YASARA if the console cannot be launched.
+../yapycon//yapycon.py:139 TODO: MID, Add an option to be able to just launch the kernel without creating the widget.
+../yapycon//yapycon.py:162 TODO: LOW, Reduce the use of global variables in RpcServerThread
+../yapycon//yasara_kernel.py:162 TODO: HIGH, Revise the accessibility of these functions.
+../yapycon//yasara_kernel.py:193 TODO: HIGH, Review this function
+../yapycon//yasara_kernel.py:213 TODO: HIGH, review whether to include these two functions
+../yapycon//yasara_kernel.py:244 TODO: HIGH, Review whether to allow for Exit() to be used from the kernel
