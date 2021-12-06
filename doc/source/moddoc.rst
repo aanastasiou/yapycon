@@ -1325,6 +1325,8 @@ line to the end of the plugin:
 
        yasara.Exit()
 
+.. _plugin_plumbing:
+
 Plugins can start additional programs that control YASARA, like a Python module
 -------------------------------------------------------------------------------
 

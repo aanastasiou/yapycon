@@ -1,21 +1,34 @@
 """
-Callable functions from within the python console.
+YASARA functionality available to YaPyCon.
 
-Notes:    
-    * This module is largely based on the original `yasara.py` module by Elmar Krieger, that can be found in a typical 
+**Notes:**
+
+    * This module is largely based on the original `yasara.py` module by Elmar Krieger, that can be found in a typical
       YASARA installation.
-    * This module is *almost* identical to yasara.py.
-    * The key differences to its original source are:
-      * ``yasara_kernel`` does not include a number of functions that might lead to erroneous conditions (e.g. 
-        shutting down the plugin from the console or exiting Yasara).
-      * ``yasara_kernel.py`` uses the RPC proxied objects to initialise its own global variables such as:
-        * ``plugin, request, opsys, version, serialnumber, stage, owner, permissions, workdir, selection, com``
-      * ``yasara_kernel.py`` is updated to Python3 (to the extent that this is possible and practical).
+
+    * ``yasara_kernel.py`` is *almost* identical to ``yasara.py``.
+
+    * The key differences are:
+
+      1. ``yasara_kernel`` *excludes* certain YASARA functions that could bring YASARA and / or YaPyCon in an
+         indeterminate state (for example: ``StopPlugin(), Exit()``).
+      2. ``yasara_kernel.py`` *includes* certain convenience functions that reformat the output of certain YASARA commands
+         (such as: ``ListAtom(), ListBond()``). Any additional functions provided by YaPyCon are prefixed with
+         ``yapycon_`` and are very easy to browse through.
+      3. ``yasara_kernel.py`` *includes* typical docstrings in the
+         `Sphinx docstring format <https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html>`_, for:
+
+          * *All* of its own functions (i.e. the plugin code and ``yapycon_`` prefixed functions from
+            ``yasara_kernel.py``)
+          * *All* of the ``yasara.py`` functions that have been modified (e.g. ``SavePNG()``).
+          * *Selected* ``yasara.py`` functions to demonstrate the usefulness of this feature more generally.
+
+      4. ``yasara_kernel.py`` *skips* all of the initialisation that ``yasara.py`` carries out typically when it is
+         loaded. Instead, it re-uses the RPC proxied objects to initialise its own global variables such as:
+         ``plugin, request, opsys, version, serialnumber, stage, owner, permissions, workdir, selection, com``.
+
+      5. ``yasara_kernel.py`` is more up to date with Python3 (to the extent that this is possible and practical).
      
-    * By splitting the yasara module into two different modules, it is possible to control which functionality 
-      is accessible to users of the console and to an extent it is possible to update the code independently.       
-
-
 :author: Athanasios Anastasiou
 :date: Nov 2021
 """
@@ -6296,6 +6309,37 @@ def RayTrace(filename, x=None, y=None,
              zoom=None, atoms=None, labelshadow=None, 
              secalpha=None, display=None,
              outline=None, background=None):
+    """
+    Creates a raytraced screenshot of the current YASARA scene via POVRay.
+
+    Notes:
+        * More details about POVRay are available `here <https://www.povray.org/>`_
+        * The side effect of this command is very similar to ``SavePNG()``, only that the
+          "screenshot" is produced via a different means.
+        * Similarly to ``SavePNG()``, the raytraced image is returned in YaPyCon as a
+          numpy array.
+
+    :param filename: The filename to save the screenshot to (relative to ``workdir``).
+    :type filename: str(path).
+    :param x: The desired width of the raytraced image
+    :type x: int
+    :param y: The desired height of the raytraced image
+    :type y: int
+    :param zoom: The "ball zoom" factor (Please see ``Help Raytrace`` from the YASARA Console)
+    :type zoom: float
+    :param atoms: Either "Balls" or "Blobs", what sort of POVRay primitive to use to represent the atoms.
+    :type atoms: str
+    :param labelshadow: Either "Yes" or "No", determines whether text elements cast shadows.
+    :type labelshadow: str
+    :param secalpha: The secondary structure alpha blending factor as a percentage (%).
+    :type secalpha: float
+    :param display: Either "On" or "Off", determines whether to show the POVRay window during raytracing or not.
+    :type display": str
+    :param outline: Radius of "comic outline" in Angstrom
+    :type outline: float
+    :param background: Either "On" or "Off", determines whether to leave the background transparent or not.
+    :type background: str
+    """
     command = 'RayTrace '
     command += 'Filename=' + cstr(filename) + ','
     if x is not None: 
@@ -10594,15 +10638,22 @@ def yapycon_reformat_bondinfo_returned(bond_info, num_of_results):
     Reformats a list of (covalent) bond information returned from YASARA taking into account the requested format.
 
     Notes:
+        * Similar functionality can be provided to "decode" (or "repackage") the output of the rest of the 
+          ``List...`` YASARA functions.
                      
-    :param bond_info:
-    :type bond_info:
-    :param num_of_results:
+    :param bond_info: The raw output from ``ListBond()``
+    :type bond_info: list
+    :param num_of_results: The number of results that was passed to ``ListBond()``, which determines the structure of
+                           the returned results.
     :type num_of_results: int
     
-    :returns:
-    
-    :rtype:
+    :returns: A list of dictionaries whose keys are determined by ``num_of_results``. The keys are:
+              ``atomnum_sel1, atomnum_sel2, bond_order, bond_length``. This means that if ``num_of_results=2``, the
+              returned dictionaries will have a length of two and contain the first two keys (i.e. ``atomnum_sel1,
+              atomnum_sel2``). Similarly for ``1<=num_of_results<=4``.
+    :rtype: list[dict[str, num]]
+    :raises: ``TypeError`` if ``bond_info`` is not a list, if ``num_of_results`` is not ``int`` and ``ValueError`` if
+             ``num_of_results`` is out of the interval ``[1,4]``.
     """
     bond_info_type = type(bond_info)
     num_of_results_type = type(num_of_results)
@@ -10610,7 +10661,7 @@ def yapycon_reformat_bondinfo_returned(bond_info, num_of_results):
     if bond_info_type is not list:
         raise TypeError(f"bond_info expected to be list, received {bond_info_type}")
     if num_of_results_type is not int:
-        raise TypeError(f"num_of_results expected to be str, received {num_of_results_type}")
+        raise TypeError(f"num_of_results expected to be int, received {num_of_results_type}")
     if not (1 <= num_of_results <= 4):
         raise ValueError(f"num_of_results should take a value between 1 and 4, received: {num_of_results}")
         
@@ -10652,6 +10703,7 @@ def yapycon_access_image_returned(filename, current_retval=None):
 # INITIALIZE THE PLUGIN
 # =====================
 # Get the "bridge" to the already initialised module information.
+# Exception handling is necessary here to allow Sphinx to import the module for documentation purposes.
 try:
     std_relay_service = rpyc.connect("localhost", 18861)
     
@@ -10671,4 +10723,5 @@ try:
     # Change the current working directory to the working directory of YASARA
     os.chdir(workdir)
 except ConnectionRefusedError:
+    # TODO: MID, A better (noisier) way is required to complain about yasara_kernel.py having been imported OUTSIDE of YaPyCon.
     pass
