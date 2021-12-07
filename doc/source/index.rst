@@ -23,6 +23,7 @@ program for Windows, Linux, MacOS and Android"*.
    examples
    api
 
+   motivation
    devnotes
    current_todos
 

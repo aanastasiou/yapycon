@@ -1,3 +1,5 @@
+.. _devnotes:
+
 ===============
 Developer Notes
 ===============
@@ -8,173 +10,20 @@ YaPyCon is basically doing two things:
 2. It launches a Remote Procedure Call "server" (**in its own thread**) and links the context of the console with the
    context of the plugin.
 
-The most "challenging" part is #2 and the main reason why YaPyCon works and "looks" the way it does.
-
-But first, why would anyone want to do any of this?
-
-Motivation
-==========
-
-YASARA is an excellent piece of software to carry out a large (and ever expanding) number of bio-informatics related
-tasks...and more. Its acronym *"Yet Another Scientific Reality Application"* is not at all a marketing inspired
-"creative exaggeration". It really does, to the extent that it is possible and accurate, turn a computer
-(or more), into a virtual laboratory.
-
-And just as it happens in a real research laboratory, sometimes the available tools have to be tweaked slightly to
-achieve certain objectives. Perhaps a sensor needs to be sampled at a higher frequency, a parameter monitored and
-subsequently triggering other events or measurements and so on.
-
-YASARA enables its users to adapt its existing functionality to their needs in a number of different ways:
-
-1. It has its own macro language, called `Yanaconda <http://www.yasara.org/yanaconda.htm>`_ [#]_ and that language
-   *already has a console* within YASARA, accessible by hitting Space:
-
-   .. thumbnail:: resources/figures/fig_yanaconda_console.png
-
-   At the very least, Yanaconda will allow you to try out constructing a new "experiment" within YASARA, right from
-   the console or by running a macro (i.e. A yanaconda script saved to a file).
-
-   Yanaconda is remotely similar to Python and if you already have some background in programming, its syntax might
-   seem a bit alien at first, especially if you try to employ data structures that are slightly more complicated than
-   a simple variable.
-
-2. It has very simple (and effective) support for launching **and interfacing** with Python plugins.
-   YASARA will basically launch a new Python process (selecting the currently active Python interpreter), that executes
-   the plugin script.
-
-   Everything within the plugin script is familiar Python code and the script itself can import other modules and data
-   to achieve its objectives.
-
-   **All** of the commands that are exposed to Yanaconda are also available to the plugin via the ``yasara.py``
-   Python module, with some syntactic differences and some (minor) semantic differences as well. Here is an
-   illustrative example using the ``ShowMessage()`` function from the earlier screenshot:
-
-   * **Yanaconda:**
-
-     ::
-
-         > ShowMessage "Hello World"
-
-     *or*
-
-     ::
-
-        > ShowMessage Text="Hello World"
-
-   * **Python:**
-
-     ::
-
-        ShowMessage("Hello World")
-
-     *or*
-
-     ::
-
-        ShowMessage(text="Hello World")
-
-In addition to this, YASARA also defines a Domain Specific Language (DSL) that is parsed from the plugin docstrings that
-allows a YASARA plugin to:
-
-1. Modify the YASARA menu structure (e.g. create a new menu entry to launch a particular plugin)
-2. Launch standard YASARA system dialogs (e.g. select a subset of objects already loaded in a YASARA scene **and then**
-   launch the plugin on that particular selection).
-3. Allow plugins to create whole user interfaces to collect information that is then made available to a plugin when
-   launching it.
-
-...and, that is it.
-
-So, what is the "problem"?
---------------------------
-
-The specific problem that YaPyCon solves is that of the overhead required to develop a YASARA Python plugin in its
-current form.
-
-This overhead is demonstrated here through a number of illustrative notes:
-
-1. The documentation is primarily geared towards Yanaconda.
-
-   * Although the documentation is doing a very good job at explaining the different forms of a command and how
-     it may appear whether in Yanaconda or Python, there is some slight vagueness about the exact result of a command.
-
-   * A prime example of this is the ``ListHBo<Atom|Res|Mol|Obj>()`` command(s). The command that queries all data
-     available to YASARA about the hydrogen bonds of a molecule at the level of atoms, residues, molecules or objects.
-
-   * The in-program documentation describes its Yanaconda version in great detail. When it comes to the explanation
-     of the ``results`` parameter, it reads:
-
-     *"The Results parameter defines the number of results to be returned per hydrogen bond (it does not affect the
-     printout in the console). The number of available results depends on the final selection unit:"*
-
-     So, given a ``results=5`` and 100 bonds returned by this command, does this mean that the list of returned
-     results is a list of 100 elements, each of them a list of 5 numbers each? ...Or, 500 elements where it is
-     implied that elements ``0..4`` belong to the first bond, elements ``5..8`` belong to the second bond and so on?
-
-     The second case is the correct answer here. YASARA will return a **single list** with
-     ``number_of_bonds * results`` long and it is up to the user to "unwind" or repackage it into something a bit more
-     readable in Python.
-
-     This is not exactly clear from that explanation and is only "clarified" in the in-program documentation example
-     provided along with that command.
-
-
-2. Trying out the effect of a command requires the user to write a complete plugin.
-
-   * If you are new to YASARA and you are reading the in-program documentation for a particular command, the first
-     thing you might want to do is "try it out" in **Python**.
-
-     * But, to do this, you first have to *write a complete plugin skeleton script*.
-
-       * And to do this, you really have to understand **exactly** how plugins work, **BEFORE** you are able to run
-         even a plain simple "Hello World".
-
-   * This is not exactly trivial (and also complicated by point #3, below). To get an idea about what this involves,
-     please see the actual YASARA plugin documentation at the Appendix of YaPyCon's documentation,
-     `here <source_module_doc>`_
-
-3. Writing plugins in an "interactive" way (rapid prototyping) is time consuming:
-
-   * Let's assume that you have gone through the basics of setting up a plugin and you now have a working
-     skeleton that you use to quickly test ideas.
-
-   * At its very minimum, this process involves:
-
-     1. Starting YASARA
-     2. Launching the plugin
-     3. Examining its output
-     4. Shutting down the plugin
-     5. Altering the code
-     6. Going back to step 2, until requirement is not met.
-
-   * Because of the way YASARA launches and handles plugins, it might "hang" or fail to launch a particular plugin
-     without returning enough information to the console about the nature of the error.
-
-   * For example, if for any reason your source file has been "corrupted" by an editor that ignores Python's formatting
-     requirements or one of the imported modules has failed to load, the plugin might hang at an exception that does not
-     find its way back to YASARA. This might cause the plugin to execute partially, *before* hitting the
-     ``yasara.plugin.end()`` statement that is required by all plugins to terminate gracefully. As a result of this,
-     we now have to restart YASARA itself, effectively losing any unsaved progress up to that point.
-
-The Yasara Python Console (YaPyCon)
------------------------------------
-
-YaPyCon was born out of these little "frustrations" the effect of which is amplified when the objective is **not** to
-learn how to program in YASARA but to actually achieve a particular objective.
-
-So, why not give YASARA a proper Python console?
-
-YaPyCon Internals
-=================
-
 Having a program launch a Python console to provide scripting capabilities to another program is the least difficult
 part of this endeavour, thanks to projects like `qtconsole <https://qtconsole.readthedocs.io/en/stable/>`_.
 
-The key problem that YaPyCon had to solve was "simulating" the effect of ``yasara.py`` **from a separate process**.
+The most "challenging" part is #2 and the main reason why YaPyCon works and "looks" the way it does.
+
+To understand why, it is essential to understand how YASARA launches a plugin and how does that plugin communicate
+back with the main process that launched it.
+
 
 YASARA - Plugin communications
-------------------------------
+==============================
 
-To understand better the challenges behind this point, let's have a look at what happens when YASARA launches a plugin:
+Let us first have a look at what happens when YASARA launches a plugin. Here is a diagram with all the key actors
+involved:
 
 .. mermaid::
     :caption: Simplified sequence diagram of the plugin launching process.
@@ -213,20 +62,58 @@ And, having described the initialisation part, let us now try to "call" a YASARA
         yasara.py->>Local_Socket_Server: Read r
         yasara.py->>Plugin: return r
 
+Remarks
+-------
 The key points to note here are:
 
 1. YASARA accepts commands about what to do via the ``stdout`` of the plugin process.
-2. When YASARA wants to pass results back to the plugin process, it connects to a local socket server
+2. YASARA returns command results back to the plugin via a a local socket server
    that is launched as part of the initialisation process. [#]_
-3. There are *"no actual Python bindings"*. All of the functions in ``yasara.py`` are very simple interfaces that
-   format a string with the equivalent Yanaconda command and pass it back to YASARA. This is a subtle point but useful
-   in explaining a particular behaviour that occurs later on, when you forget to close the yanaconda console from
-   within YASARA.
+2. A *"YASARA command"* always implies a *Yanaconda command*.
+   There are *"no actual Python bindings"*. All of the functions in ``yasara.py`` are very simple adapters that
+   format a string with the equivalent Yanaconda command and pass it back to YASARA. This communication is handled
+   by ``runretval()`` of the ``yasara.py`` module. Every one of the Python functions is structured along the following
+   template:
+   ::
 
-Where things break
-------------------
-This process works (has worked) remarkably well as long as ``yasara.py`` is imported by **the same process that launched
-the plugin**. In that case, ``stdout`` is ``stdout``, ``stderr`` is ``stderr`` and everything works well.
+       def some_function(p1, p2, pn=None):
+           # Build the equivalent Yanaconda command
+           yanaconda_string = f"SomeFunction parameter1={p1}, parameter2={p2}"
+           if pn is not None:
+               yanaconda_string += f" pn={pn}"
+           # Send it to YASARA
+           command_result = runretval(yanaconda_string)
+           # Return the value to the Python code
+           return command_result
+
+   And here is a (simplified) view of what happens within ``runretval()``:
+
+   ::
+
+       def runretval(command):
+           global com
+           # If the Local_Socket_Server has not been initialised yet, initialise it here.
+           if (com==None):
+              com = yasara_communicator()
+
+           # Use stdout to send the command to YASARA and use the Local_Socket_Server
+           # port p to return the results.
+           sys.stdout.write('ExecRV%d: '%com.port+command+'\n')
+           sys.stdout.flush()
+           # Accept the connection immediately
+           com.accept()
+           return(com.receivemessage(com.RESULT))
+
+   At this point, try not to worry too much about "Pythonisms", optimisations or rationale and focus on understanding
+   the round-trip from Python function call to returning any results.
+
+
+When is this not working?
+=========================
+
+This process works (has worked) sufficiently well as long as ``yasara.py`` is imported by **the same process that
+launched the plugin**. In that case, the ``stdout`` that ``yasara.py`` is using is the exact same ``stdout`` that the
+plugin "sees" as well and everything works well.
 
 But, what is different when ``yasara.py`` is imported by a process that is **different** than the plugin process?
 
@@ -237,9 +124,12 @@ This creates a complete mismatch in two points:
 
    * For example, in the case of the Python Console, the ``stdout`` is simply redirected to the console itself.
 
-2. ``yasara.py`` will still go through the initialisation process (*"Initialise plugin variables"*), it will
-   re-discover a completely different port ``p`` (launching yet another ``Local_Socket_Server``) and will attempt
-   to pass that port information back to YASARA but will fail because ``stdout`` **is not pointing back to YASARA**.
+2. Importing ``yasara.py`` from that separate process, will still go through the initialisation process
+   (*"Initialise plugin variables"*), it will re-discover a completely different port ``p`` (launching yet another
+   ``Local_Socket_Server``) and will attempt to pass that port information back to YASARA.
+   **That** step will fail, because ``stdout`` **is not pointing back to YASARA**. At that point, the whole plugin
+   hangs waiting for a response from the main YASARA program (that is now not even aware that a Yanaconda command
+   was sent to it).
 
 These two conditions render any subsequent use of ``import yasara`` from other processes entirely useless [#]_.
 
@@ -247,6 +137,7 @@ These two conditions render any subsequent use of ``import yasara`` from other p
     :caption: Simplified sequence diagram of importing ``yasara`` from a "secondary" process.
 
     sequenceDiagram
+        autonumber
         participant YASARA
         participant Plugin
         participant yasara.py_1
@@ -265,15 +156,111 @@ These two conditions render any subsequent use of ``import yasara`` from other p
         Plugin->>Plugin: Examine (r)
         Plugin->>Python_Console: Launch console
         Python_Console->>yasara.py_2: import yasara
+        yasara.py_2 ->>yasara.py_2: Initialise plugin variables
+        yasara.py_2 ->>yasara.py_2: Discover a free port (p2)
+        yasara.py_2 ->>Local_Socket_Server_2: Launch on port p2 <br/>
+        rect rgb(232,88,88)
+        yasara.py_2 --xYASARA: Pass p2 back to ...
+        end
+
+In this sequence, that last step is getting lost in the "pipework".
+
+Remarks
+-------
+
+1. There is no need to launch a new local server because the plugin has already started one. That is
+   not too problematic in itself, after all, YASARA only needs to know which server to send its response to.
+
+2. The connection to the processes' ``stdout`` has been lost. Therefore, the ``runretval()`` of ``yasara.py`` *as
+   imported from the console process* cannot communicate with the original YASARA process.
 
 
-.. [#] Absolutely no relationship to `Anaconda <https://www.anaconda.com/>`_, Yanaconda's acronym means
-       *"Yet ANother Abridged COding 'N' Development Approach"* (YANACONDA), anything else is a plain reptile species
-       wordplay confusion.
+Adding Remote Procedure Calling
+===============================
+
+The solution to this situation was to find a way to "propagate" the already initialised variables, from
+``yasara.py`` to any subsequent processes.
+
+And this way was Remote Procedure Calling (RPC), via the `rpyc <https://rpyc.readthedocs.io/en/latest/>`_ module.
+
+``rpyc`` provides a convenient mechanism for a Python program to call functions or access memory as if it was part of
+the context of one process but in actual fact these residing elsewhere (in a different process or even different
+computer). This solution is similar to launching yet another socket server but acting in an almost transparent way to
+coordinate calls across the network.
+
+
+Adding the ``yasara_kernel.py`` module
+======================================
+
+In a typical YASARA plugin, ``yasara.py`` must be the first module to be imported by a plugin for it to be able to
+communicate with the main YASARA program.
+
+Similarly, from within the Python console, the first thing to do is to import ``yasara_kernel.py``.
+
+The two modules are *almost* identical. However, in developing YaPyCon it was quickly realised that:
+
+1. For backwards compatibility and the stability of YASARA, it was not possible to alter the existing ``yasara.py`` at
+   all.
+2. ``yasara.py`` provided access to a number of functions that could work in a "self-destructing" way if launched from
+   within YaPyCon. For example, allowing ``Exit()`` could lead to "zombie" processes where the
+   Python Console could still go on after having sent a command to YASARA to close.
+3. Decoupling ``yasara_kernel.py`` from ``yasara.py`` provided an additional flexibility to modify the structure of
+   the module without worrying about the effect of these modifications to existing plugins.
+
+   * Part of these modifications was to add functions for "unpacking" certain result types as returned by YASARA, for
+     convenience. In any case, such "unpacking" is expected to commonly occur in a given plugin, apart from trivial
+     cases.
+
+
+
+How YaPyCon works
+=================
+
+Having described all this, a simplified view of the main actors in the communications between the YASARA Python Console
+and the main process of YASARA now looks like this:
+
+.. mermaid::
+    :caption: Simplified sequence diagram of the most important actors in the communications between the Python
+              Console and YASARA.
+
+    sequenceDiagram
+        autonumber
+        participant YASARA
+        participant YaPyCon_Plugin
+        participant yasara.py
+        participant Local_Socket_Server
+        participant Python_Console
+        participant yasara_kernel.py
+        participant RPC_Server
+
+
+        YASARA ->>YaPyCon_Plugin: Launch plugin with <br/>request (r), listen on <br/>stdout for <br/>Yanaconda commands.
+        YaPyCon_Plugin ->>yasara.py: import yasara
+        yasara.py ->>yasara.py: Initialise plugin variables
+        yasara.py ->>yasara.py: Discover a free port (p)
+        yasara.py ->>Local_Socket_Server: Launch on port p <br/>
+        yasara.py ->>YASARA: Pass p back to YASARA <br/> (as part of calling ``LoadStorage``)
+        yasara.py ->>YaPyCon_Plugin: Import complete, <br/> return to plugin <br/> code execution
+        YaPyCon_Plugin->>YaPyCon_Plugin: Examine (r)
+        YaPyCon_Plugin->>RPC_Server: Launch server at 18861
+        YaPyCon_Plugin->>Python_Console: Launch console
+        Python_Console->>yasara_kernel.py: import yasara_kernel
+        yasara_kernel.py->>RPC_Server: Connect
+        yasara_kernel.py->>RPC_Server: Get proxy <br/>objects from yasara.py
+        RPC_Server->>YaPyCon_Plugin: Get proxy objects
+        YaPyCon_Plugin->>RPC_Server: Return proxy objects
+        RPC_Server->>yasara_kernel.py:Return proxy objects
+        yasara_kernel.py->>yasara_kernel.py: Initialise local <br/> plugin variables
+        yasara_kernel.py->>Python_Console:Continue execution
+        Python_Console->>Python_Console:Enter Read-Eval-Print Loop
+
+For more details about each of the points mentioned in this section, please see :ref:`api`
+
+-----
 
 .. [#] This process is simplified here for economy of space. More accurately, the discovery of a free port and the
        socket server binding are handled by class ``yasara_communicator`` that is "constructed" as part of the
-       ``LoadStorage()`` command.
+       ``LoadStorage()`` command. The latter is called as part of the ``yasara.py`` initialisation of variables.
 
 .. [#] Again, this is a simplification for economy of space and scope. In actual fact, the Python console is launched as
        a set of processes, threads and communication channels because of the way the Jupyter protocol operates. A full

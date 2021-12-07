@@ -1,20 +1,22 @@
-===========
-Plugin code
-===========
+.. _api:
+
+==================
+Code documentation
+==================
 
 The plugin functionality is split in two files:
 
 1. ``yapycon.py``
 
-   * For the actual code for the plugin.
+   * For the actual code of the plugin.
 
 
 2. ``yasara_kernel.py``
 
    * For all YASARA functionality available via the Python kernel.
    * By having this separate ``yasara_kernel.py``, it is possible to control which functionality
-     is accessible to users of the console and to an extent update the module code and preserving backwards
-     compatibility.
+     is accessible to users of the console and to an extent update the module code and preserve backwards
+     compatibility at the same time.
 
 
 
@@ -32,7 +34,7 @@ The plugin functionality is split in two files:
     and other parameters that are passed to it when YASARA launches it.
 
     For more details about how this works and why the docstring of ``yapycon`` looks the way it does here,
-    please check the full YASARA module documentation at the appendix, sections:
+    please see the following sections:
 
     * :ref:`moddoc_header_info`; and
     * :ref:`moddoc_docstring_details`

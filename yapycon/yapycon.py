@@ -37,7 +37,7 @@ class YasaraContextRelayService(Service):
     """
     def __init__(self, connection_info=None):
         super().__init__()
-        self._my_stream = sys.stdout
+        self._output_stream = sys.stdout
         self._plugin = yasara.plugin
         self._request = yasara.request
         self._opsys = yasara.opsys
@@ -88,10 +88,8 @@ class YasaraContextRelayService(Service):
         return self._connection_info
 
     def exposed_stdout_relay(self, payload):
-        # sys.stdout.write(payload)
-        # sys.stdout.flush()
-        self._my_stream.write(payload)
-        self._my_stream.flush()
+        self._output_stream.write(payload)
+        self._output_stream.flush()
 
 
 class RpcServerThread(threading.Thread):
@@ -121,6 +119,7 @@ class RpcServerThread(threading.Thread):
     def stop_server(self):
         # Stop server is called from the main thread effectively terminating RpcServerThread
         self._serv_object.close()
+
 
 def yapycon_launch_plugin(plugin_request):
     """
