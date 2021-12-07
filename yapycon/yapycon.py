@@ -130,8 +130,9 @@ def yapycon_launch_plugin(plugin_request):
     """
     # TODO: HIGH, intercept "CheckIfDisabled" and return an informative message to YASARA if the console cannot be launched.
     if plugin_request == "YaPyCon":
-        # Create the qt handle for the console "app".
+        # Create (or get) the qt handle for the console "app".
         app = guisupport.get_app_qt4()
+        app.setApplicationName("YASARA Python Console (YaPyCon)")
 
         # Create the kernel "process"
         # NOTE: QtKernelManager works too (In addition it also generates a proper key)

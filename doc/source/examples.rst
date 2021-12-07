@@ -125,6 +125,9 @@ types (e.g. hydrogen bonds, hydrophobic interactions, pi-pi interactions and oth
 structure of a given molecule but this functionality is *not available at the YASARA View stage*.
 
 
+-----
+
+
 
 .. [#] Sanity checks are applied at different levels and "stages". The entry level stage, YASARA View, preforms 4
        standard checks as part of the ``LoadPDB`` command but the ``Clean`` command of the YASARA Model stage, performs
