@@ -32,4 +32,4 @@ If everything has gone well, you will see a *"Python Console"* option added unde
 
 # Documentation
 
-For more details head over to [readthedocs for the complete YaPyCon manual]().
+For more details head over to [readthedocs for the complete YaPyCon manual](https://yapycon.readthedocs.io/en/latest/).
