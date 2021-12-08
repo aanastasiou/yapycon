@@ -1,6 +1,6 @@
 # YaPyCon
 
-``YaPyCon`` embeds a Python console in YASARA, *"...a molecular-graphics, -modeling and -simulation
+YaPyCon embeds a Python console in YASARA, *"...a molecular-graphics, -modeling and -simulation
 program for Windows, Linux, MacOS and Android"* thereby:
 
 1. Enabling rapid prototyping of YASARA scripts
@@ -20,7 +20,7 @@ program for Windows, Linux, MacOS and Android"* thereby:
 1. Copy ``yapycon/yapycon.py`` and ``yapycon/yasara_kernel.py`` to ``<YASARA_HOME_DIRECTORY>/plg/``
    
    * This step does make YASARA aware of the plugin but for YaPyCon to work properly, it needs to operate within
-     a virtual environment that provides it with the necessary pre-requsites. This is achieved in the next steps.
+     a virtual environment that provides it with the necessary pre-requsites. This is achieved with the following steps.
      
 2. Create a virtual environment and install ``requirements.txt``
 

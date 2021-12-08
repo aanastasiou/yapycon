@@ -6,7 +6,7 @@
 Welcome to YaPyCon's documentation!
 ===================================
 
-``YaPyCon`` embeds a Python console in YASARA, *"...a molecular-graphics, -modeling and -simulation
+YaPyCon embeds a Python console in YASARA, *"...a molecular-graphics, -modeling and -simulation
 program for Windows, Linux, MacOS and Android"* thereby:
 
 1. Enabling rapid prototyping of YASARA scripts
