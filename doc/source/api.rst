@@ -13,10 +13,7 @@ The plugin functionality is split in two files:
 
 2. ``yasara_kernel.py``
 
-   * For all YASARA functionality available via the Python kernel.
-   * By having this separate ``yasara_kernel.py``, it is possible to control which functionality
-     is accessible to users of the console and to an extent update the module code and preserve backwards
-     compatibility at the same time.
+   * For all YASARA functionality available within YaPyCon.
 
 
 
@@ -24,7 +21,7 @@ The plugin functionality is split in two files:
 ==============
 
 .. note::
-    The overall description of the ``yapycon`` plugin code in the following parts of the documentation,
+    The description of the ``yapycon`` plugin code in the following parts of the documentation,
     might show up as a random collection of ``MainMenu, PullDownMenu``, etc, statements.
 
     It is not.

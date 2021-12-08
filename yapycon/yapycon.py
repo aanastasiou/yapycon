@@ -113,11 +113,14 @@ class RpcServerThread(threading.Thread):
                                            protocol_config={"allow_public_attrs": True})
 
     def run(self):
+        """
+        Launches the RPC ThreadedServer.
+        """
         # The ThreadedServer is started and blocks here (as per rpyc)
         self._serv_object.start()
 
     def stop_server(self):
-        # Stop server is called from the main thread effectively terminating RpcServerThread
+        # stop_server is called from the main thread effectively terminating RpcServerThread
         self._serv_object.close()
 
 

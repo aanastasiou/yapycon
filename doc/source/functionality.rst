@@ -1,6 +1,6 @@
-============================
-Launching the Python console
-============================
+===================================
+Launching the YASARA Python Console
+===================================
 
 Assuming an uneventful :ref:`installation process <install_quickstart>`, you can now launch ``YaPyCon``. This is
 identical to an IPython session, providing a Python language shell which executes Python directly.
@@ -27,15 +27,15 @@ functionality,  with all the useful features expected, such as auto-completion o
 For example, to see all the different functions by which a plugin can load information into YASARA, simply type
 "Load" and press Tab:
 
-.. figure:: resources/figures/fig_tab_comp.png
+.. thumbnail:: resources/figures/fig_tab_comp.png
 
 Inline help is provided about each command as you type, for example, typing ``LoadPNG(...`` brings up the docstring
 of the function.
 
-.. figure:: resources/figures/fig_inline_help.png
+.. thumbnail:: resources/figures/fig_inline_help.png
 
 .. note::
-    ``yasara_kernel.py`` provides just enough information in the function docstrings to provide reminders to a
+    ``yasara_kernel.py`` provides just enough information in *some* function docstrings to provide reminders for a
     function's use and its parameters.
 
     This *does not aim to substitute YASARA's documentation*.
@@ -43,16 +43,32 @@ of the function.
     YASARA's documentation provides much more information about a command, often relating it to a specific
     scientific usage as well.
 
-    YASARA's documentation system is accessible from within YASARA by pressing Space (to bring up the YASARA console)
-    and then typing ``Help `` followed by a particular command. (e.g. ``Help LoadPNG``).
+    YASARA's documentation system is accessible from within YASARA by pressing Space (to bring up the Yanaconda console)
+    and then typing ``Help`` followed by a particular command. (e.g. ``Help LoadPNG``).
 
+Terminating the console
+=======================
 
 The console appears like any other application window, so, to close it, simply click on the ``X`` at the top right-hand
 side of the window or type ``exit``, just as you would in any shell.
 
-Just be mindfull that if you have the in-software console open as well, the Python console might appear to "hang".
-This is a known behaviour and before you start killing processes, make sure that you have closed the in-program
-console.
+
+Caveats
+=======
+
+1. If the Yanaconda console is open *prior to making a function call* from YaPyCon, it might
+   appear to "hang", as depicted in the following screenshot:
+
+   .. thumbnail:: resources/figures/fig_yapycon_yanaconda_console_open.png
+
+   This is a known behaviour and before attempting to restart any process, please make sure that you have closed the
+   in-program console. Even if the plugin appears to "hang" momentarily, it will still go ahead once the Yanaconda
+   console is closed.
+
+2. If the program remains in this "indeterminate" state for too long (>20 seconds), an error message similar to
+   the one depicted below will be produced. If that occurs, simply close the console and restart it.
+
+   .. thumbnail:: resources/figures/fig_plugin_timeout.png
 
 
 .. Accessing the Jupyter Kernel

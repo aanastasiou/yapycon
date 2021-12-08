@@ -8,7 +8,7 @@ and "experiments" within YASARA.
 To understand better what this overhead "problem" is, it is essential to understand some key concepts around YASARA.
 
 
-YASARA & its scripting capabilities
+YASARA and its scripting capability
 -----------------------------------
 
 YASARA is an excellent piece of software to carry out a large (and ever expanding) number of bio-informatics related

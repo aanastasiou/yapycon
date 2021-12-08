@@ -69,7 +69,7 @@ The key points to note here are:
 1. YASARA accepts commands about what to do via the ``stdout`` of the plugin process.
 2. YASARA returns command results back to the plugin via a a local socket server
    that is launched as part of the initialisation process. [#]_
-2. A *"YASARA command"* always implies a *Yanaconda command*.
+3. A *"YASARA command"* always implies a *Yanaconda command*.
    There are *"no actual Python bindings"*. All of the functions in ``yasara.py`` are very simple adapters that
    format a string with the equivalent Yanaconda command and pass it back to YASARA. This communication is handled
    by ``runretval()`` of the ``yasara.py`` module. Every one of the Python functions is structured along the following
@@ -104,7 +104,7 @@ The key points to note here are:
            com.accept()
            return(com.receivemessage(com.RESULT))
 
-   At this point, try not to worry too much about "Pythonisms", optimisations or rationale and focus on understanding
+   At this point, try not to worry too much about "Pythonisms" or optimisations and focus on understanding
    the round-trip from Python function call to returning any results.
 
 
@@ -133,35 +133,38 @@ This creates a complete mismatch in two points:
 
 These two conditions render any subsequent use of ``import yasara`` from other processes entirely useless [#]_.
 
-.. mermaid::
-    :caption: Simplified sequence diagram of importing ``yasara`` from a "secondary" process.
+.. thumbnail:: resources/figures/fig_mermaid_when_comms_break.png
 
-    sequenceDiagram
-        autonumber
-        participant YASARA
-        participant Plugin
-        participant yasara.py_1
-        participant Local_Socket_Server_1
-        participant Python_Console
-        participant yasara.py_2
-        participant Local_Socket_Server_2
 
-        YASARA ->>Plugin: Launch plugin with <br/>request (r), listen on <br/>stdout for <br/>Yanaconda commands.
-        Plugin ->>yasara.py_1: import yasara
-        yasara.py_1 ->>yasara.py_1: Initialise plugin variables
-        yasara.py_1 ->>yasara.py_1: Discover a free port (p)
-        yasara.py_1 ->>Local_Socket_Server_1: Launch on port p <br/>
-        yasara.py_1 ->>YASARA: Pass p back to YASARA <br/> (as part of calling ``LoadStorage``)
-        yasara.py_1 ->>Plugin: Import complete, <br/> return to plugin <br/> code execution
-        Plugin->>Plugin: Examine (r)
-        Plugin->>Python_Console: Launch console
-        Python_Console->>yasara.py_2: import yasara
-        yasara.py_2 ->>yasara.py_2: Initialise plugin variables
-        yasara.py_2 ->>yasara.py_2: Discover a free port (p2)
-        yasara.py_2 ->>Local_Socket_Server_2: Launch on port p2 <br/>
-        rect rgb(232,88,88)
-        yasara.py_2 --xYASARA: Pass p2 back to ...
-        end
+.. .. mermaid::
+..     :caption: Simplified sequence diagram of importing ``yasara`` from a "secondary" process.
+..
+..     sequenceDiagram
+..         autonumber
+..         participant YASARA
+..         participant Plugin
+..         participant yasara.py_1
+..         participant Local_Socket_Server_1
+..         participant Python_Console
+..         participant yasara.py_2
+..         participant Local_Socket_Server_2
+..
+..         YASARA ->>Plugin: Launch plugin with <br/>request (r), listen on <br/>stdout for <br/>Yanaconda commands.
+..         Plugin ->>yasara.py_1: import yasara
+..         yasara.py_1 ->>yasara.py_1: Initialise plugin variables
+..         yasara.py_1 ->>yasara.py_1: Discover a free port (p)
+..         yasara.py_1 ->>Local_Socket_Server_1: Launch on port p <br/>
+..         yasara.py_1 ->>YASARA: Pass p back to YASARA <br/> (as part of calling ``LoadStorage``)
+..         yasara.py_1 ->>Plugin: Import complete, <br/> return to plugin <br/> code execution
+..         Plugin->>Plugin: Examine (r)
+..         Plugin->>Python_Console: Launch console
+..         Python_Console->>yasara.py_2: import yasara
+..         yasara.py_2 ->>yasara.py_2: Initialise plugin variables
+..         yasara.py_2 ->>yasara.py_2: Discover a free port (p2)
+..         yasara.py_2 ->>Local_Socket_Server_2: Launch on port p2 <br/>
+..         rect rgb(232,88,88)
+..         yasara.py_2 --xYASARA: Pass p2 back to ...
+..         end
 
 In this sequence, that last step is getting lost in the "pipework".
 
@@ -219,40 +222,43 @@ How YaPyCon works
 Having described all this, a simplified view of the main actors in the communications between the YASARA Python Console
 and the main process of YASARA now looks like this:
 
-.. mermaid::
-    :caption: Simplified sequence diagram of the most important actors in the communications between the Python
-              Console and YASARA.
-
-    sequenceDiagram
-        autonumber
-        participant YASARA
-        participant YaPyCon_Plugin
-        participant yasara.py
-        participant Local_Socket_Server
-        participant Python_Console
-        participant yasara_kernel.py
-        participant RPC_Server
+.. thumbnail:: resources/figures/fig_mermaid_yapycon_operation.png
 
 
-        YASARA ->>YaPyCon_Plugin: Launch plugin with <br/>request (r), listen on <br/>stdout for <br/>Yanaconda commands.
-        YaPyCon_Plugin ->>yasara.py: import yasara
-        yasara.py ->>yasara.py: Initialise plugin variables
-        yasara.py ->>yasara.py: Discover a free port (p)
-        yasara.py ->>Local_Socket_Server: Launch on port p <br/>
-        yasara.py ->>YASARA: Pass p back to YASARA <br/> (as part of calling ``LoadStorage``)
-        yasara.py ->>YaPyCon_Plugin: Import complete, <br/> return to plugin <br/> code execution
-        YaPyCon_Plugin->>YaPyCon_Plugin: Examine (r)
-        YaPyCon_Plugin->>RPC_Server: Launch server at 18861
-        YaPyCon_Plugin->>Python_Console: Launch console
-        Python_Console->>yasara_kernel.py: import yasara_kernel
-        yasara_kernel.py->>RPC_Server: Connect
-        yasara_kernel.py->>RPC_Server: Get proxy <br/>objects from yasara.py
-        RPC_Server->>YaPyCon_Plugin: Get proxy objects
-        YaPyCon_Plugin->>RPC_Server: Return proxy objects
-        RPC_Server->>yasara_kernel.py:Return proxy objects
-        yasara_kernel.py->>yasara_kernel.py: Initialise local <br/> plugin variables
-        yasara_kernel.py->>Python_Console:Continue execution
-        Python_Console->>Python_Console:Enter Read-Eval-Print Loop
+.. .. mermaid::
+..     :caption: Simplified sequence diagram of the most important actors in the communications between the Python
+..               Console and YASARA.
+..
+..     sequenceDiagram
+..         autonumber
+..         participant YASARA
+..         participant YaPyCon_Plugin
+..         participant yasara.py
+..         participant Local_Socket_Server
+..         participant Python_Console
+..         participant yasara_kernel.py
+..         participant RPC_Server
+..
+..
+..         YASARA ->>YaPyCon_Plugin: Launch plugin with <br/>request (r), listen on <br/>stdout for <br/>Yanaconda commands.
+..         YaPyCon_Plugin ->>yasara.py: import yasara
+..         yasara.py ->>yasara.py: Initialise plugin variables
+..         yasara.py ->>yasara.py: Discover a free port (p)
+..         yasara.py ->>Local_Socket_Server: Launch on port p <br/>
+..         yasara.py ->>YASARA: Pass p back to YASARA <br/> (as part of calling ``LoadStorage``)
+..         yasara.py ->>YaPyCon_Plugin: Import complete, <br/> return to plugin <br/> code execution
+..         YaPyCon_Plugin->>YaPyCon_Plugin: Examine (r)
+..         YaPyCon_Plugin->>RPC_Server: Launch server at 18861
+..         YaPyCon_Plugin->>Python_Console: Launch console
+..         Python_Console->>yasara_kernel.py: import yasara_kernel
+..         yasara_kernel.py->>RPC_Server: Connect
+..         yasara_kernel.py->>RPC_Server: Get proxy <br/>objects from yasara.py
+..         RPC_Server->>YaPyCon_Plugin: Get proxy objects
+..         YaPyCon_Plugin->>RPC_Server: Return proxy objects
+..         RPC_Server->>yasara_kernel.py:Return proxy objects
+..         yasara_kernel.py->>yasara_kernel.py: Initialise local <br/> plugin variables
+..         yasara_kernel.py->>Python_Console:Continue execution
+..         Python_Console->>Python_Console:Enter Read-Eval-Print Loop
 
 For more details about each of the points mentioned in this section, please see :ref:`api`
 

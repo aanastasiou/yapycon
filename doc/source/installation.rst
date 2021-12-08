@@ -19,9 +19,9 @@ Read this section if:
 Installation
 ------------
 
-1. Copy ``src/yapycon.py`` and ``src/yasara_kernel.py`` to ``<YASARA_HOME_DIRECTORY>/plg/``
+1. Copy ``yapycon/yapycon.py`` and ``yapycon/yasara_kernel.py`` to ``<YASARA_HOME_DIRECTORY>/plg/``
    
-   * This step does make YASARA aware of the plugin but for ``YaPyCon`` to work properly, it needs to operate within
+   * This step does make YASARA aware of the plugin but for YaPyCon to work properly, it needs to operate within
      a virtual environment that provides it with the necessary pre-requsites. This is achieved in the next steps.
      
 2. Create a virtual environment and install ``requirements.txt``

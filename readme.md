@@ -1,46 +1,35 @@
 # YaPyCon
 
-A Python Console plugin for Yet Another Scientific Artificial Reality Application (YASARA)
+``YaPyCon`` embeds a Python console in YASARA, *"...a molecular-graphics, -modeling and -simulation
+program for Windows, Linux, MacOS and Android"* thereby:
 
-**MS Windows Version**.
+1. Enabling rapid prototyping of YASARA scripts
+2. Offering common "shell" functionality such as:
+   * Code auto-completion
+   * Inline code documentation
+   * Tighter integration with ``matplotlib``
 
-# Installation
+3. Improving and expanding certain aspects of YASARA's Python functionality.
 
-## To install YASARA View:
+![image](https://github.com/aanastasiou/yapycon/raw/main/doc/source/resources/figures/fig_main_yapycon.png?raw=true)
 
-1. Go to [yasara.org](http://www.yasara.org/viewdl.htm) and "apply" to download YASARA View.
-2. An archive is made available to download. The archive's format depends on the selected platform.
-   * For the windows version a `DeployYasara.exe` is provided that is approximately 1GB in size.
-3. The executable is a self-extracting archive that will create a `yasara/` directory in the Current 
-   Working Directory.
+# Quickstart
 
-## To install (mini) Conda:
+## Installation
 
-1. Go to [conda.io](https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html) download and install 
-   your favourite Conda.
-2. Start an "Anaconda PowerShell Prompt" and make sure that it at least starts within a `(base)` virtual environment.
+1. Copy ``yapycon/yapycon.py`` and ``yapycon/yasara_kernel.py`` to ``<YASARA_HOME_DIRECTORY>/plg/``
+   
+   * This step does make YASARA aware of the plugin but for YaPyCon to work properly, it needs to operate within
+     a virtual environment that provides it with the necessary pre-requsites. This is achieved in the next steps.
+     
+2. Create a virtual environment and install ``requirements.txt``
 
+3. Drop to a terminal, activate the environment and launch YASARA.
 
-## To install the plugin
+If everything has gone well, you will see a *"Python Console"* option added under the *"Window"* menu option:
 
-1. Copy `src/yapycon.py` to your `<YASARA_HOME_FOLDER>/plg/` directory 
-2. Apply `requirements.txt` to your virtual environment.
-3. Activate the virtual environment
-4. Launch `<YASARA_HOME_FOLDER>/YASARA.exe` from within an "Anaconda PowerShell Prompt" with the 
-   Python Virtual Environment already activated.
+![image](https://github.com/aanastasiou/yapycon/raw/main/doc/source/resources/figures/fig_showing_option.png?raw=true)
 
-* If YASARA has picked up the Python interpreter from your system, the option "Python Console" will appear 
-  within the top level "Window" menu, right after the "Update frequency" option.
+# Documentation
 
-
-# Using the plugin
-
-1. Start "Anaconda PowerShell Prompt" and make sure that the right virtual environment is activated
-2. Use this same *"terminal prompt"* to launch `<YASARA_HOME_FOLDER>/YASARA.exe`.
-3. Select Window --> Python Console
-4. A typical Python console is started
-
-At this point, you have both a Python Console to connect to YASARA as well as a Jupyter notebook kernel that 
-can connect to YASARA directly.
-
-
+For more details head over to [readthedocs for the complete YaPyCon manual]().
