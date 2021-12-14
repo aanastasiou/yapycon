@@ -37,7 +37,7 @@ The plugin functionality is split in two files:
     * :ref:`moddoc_docstring_details`
 
 .. automodule:: yapycon.yapycon
-    :members: YasaraContextRelayService, RpcServerThread
+    :members: YasaraContextRelayService, RpcServerThread, yapycon_plugin_check_if_disabled, yapycon_launch_plugin
 
 
 ``yasara_kernel.py``
@@ -54,10 +54,3 @@ The plugin functionality is split in two files:
               ListAtom,
               LoadPDB,
               ShowMessage,
-
-
-.. Unfortunately, including the complete ``yasara_kernel.py`` in this page
-.. makes it impractically long.
-..
-.. You can still review the code, either through github or by
-.. :download:`downloading it from this link. <../../src/yasara_kernel.py>`

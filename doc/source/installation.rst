@@ -13,20 +13,18 @@ Read this section if:
 * You already have a working YASARA installation
 * You already know what *"Python"* and *"virtual environment"* are 
   and you can start YASARA with a specific virtual environment activated first.
-* You already know how YASARA plugins work and where to install them.
 
 
 Installation
 ------------
 
-1. Copy ``yapycon/yapycon.py`` and ``yapycon/yasara_kernel.py`` to ``<YASARA_HOME_DIRECTORY>/plg/``
-   
-   * This step does make YASARA aware of the plugin but for YaPyCon to work properly, it needs to operate within
-     a virtual environment that provides it with the necessary pre-requsites. This is achieved in the next steps.
-     
-2. Create a virtual environment and install ``requirements.txt``
+1. Create a virtual environment and install ``requirements.txt``
 
-3. Drop to a *terminal*, activate the environment and launch YASARA
+2. Drop to a *terminal* and activate your environment
+
+3. Navigate to the directory where you downloaded YaPyCon and run the ``install_plugin``
+
+4. From the same terminal launch YASARA
 
 If everything has gone well, you will see a *"Python Console"* option added under the *"Window"* menu option:
 
@@ -81,7 +79,4 @@ If your system now includes a working YASARA installation with a properly prepar
 now ready to install and launch ``YaPyCon``.
 
 The steps to do this are identical to the description in :ref:`install_quickstart`
-
-
-
 

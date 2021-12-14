@@ -129,6 +129,10 @@ This overhead is demonstrated here through a number of illustrative notes:
      please see the actual YASARA plugin documentation at the Appendix of YaPyCon's documentation,
      `here <source_module_doc>`_
 
+     * *Please note:* An additional resource to address this point is the cookiecutter template YaPlTemp. For more
+       information please `see here <https://github.com/aanastasiou/yapltemp>`_. In fact, YaPyCon was bootstrapped via
+       YaPlTemp.
+
 3. Writing plugins in an "interactive" way (rapid prototyping) is time consuming:
 
    * Continuing from point #2, let's assume that you have gone through the basics of setting up a plugin and you now

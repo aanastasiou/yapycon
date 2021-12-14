@@ -19,13 +19,34 @@ except ImportError:
 
 import sys
 import threading
-from qtconsole.rich_jupyter_widget import RichJupyterWidget
-from qtconsole.manager import QtKernelManager
-from IPython.lib import guisupport
-from rpyc.utils.server import OneShotServer, ThreadedServer
-from rpyc import Service
 
-              
+try:
+    HAS_QTCONSOLE = True
+    from qtconsole.rich_jupyter_widget import RichJupyterWidget
+    from qtconsole.manager import QtKernelManager
+except ImportError:
+    HAS_QTCONSOLE = False
+
+try:
+    HAS_IPYTHON = True
+    from IPython.lib import guisupport
+except ImportError:
+    HAS_IPYTHON = False
+
+try:
+    HAS_RPYC = True
+    from rpyc.utils.server import OneShotServer, ThreadedServer
+    from rpyc import Service
+except ImportError:
+    HAS_RPYC = False
+
+    class Service:
+        """
+        Substitutes for rpyc's Service so that derived classes do not fail to initialise.
+        """
+        pass
+
+
 class YasaraContextRelayService(Service):
     """
     An rpyc service that establishes a "bridge" between the YaPyConsole plugin and subsequent processes.
@@ -124,6 +145,24 @@ class RpcServerThread(threading.Thread):
         self._serv_object.close()
 
 
+def yapycon_plugin_check_if_disabled():
+    """
+    Checks if YaPyCon can launch.
+
+    Notes:
+        * This function checks if it was possible for YaPyCon to load certain pre-requisite modules.
+        * If these modules were not found, this function will signal this to YASARA (by returning a 1) and subsequently,
+          YaPyCon's menu option ("Python Console") will not be available in YASARA.
+
+    :returns: Either 0 or 1 to signal Success or Failure to launch respectively.
+    :rtype: int
+    """
+    if not (HAS_IPYTHON or HAS_RPYC or HAS_QTCONSOLE):
+        return 1
+
+    return 0
+
+
 def yapycon_launch_plugin(plugin_request):
     """
     Handles the initialisation and launching of the YaPyCon plugin.
@@ -176,9 +215,11 @@ def yapycon_launch_plugin(plugin_request):
         kernel_client.stop_channels()
         # Shutdown the kernel
         kernel_manager.shutdown_kernel()
-        # Signal the end of the plugin and get back to YASARA
-        yasara.plugin.end()
 
 
 if __name__ == "__main__":
-    yapycon_launch_plugin(yasara.request)
+    if yasara.request == "CheckIfDisabled":
+        yasara.plugin.exitcode = yapycon_plugin_check_if_disabled()
+    else:
+        yapycon_launch_plugin(yasara.request)
+    yasara.plugin.end()
