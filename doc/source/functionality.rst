@@ -1,15 +1,51 @@
-===================================
-Launching the YASARA Python Console
-===================================
+=============
+Using YaPyCon
+=============
 
-Assuming an uneventful :ref:`installation process <install_quickstart>`, you can now launch ``YaPyCon``. This is
-identical to an IPython session, providing a Python language shell which executes Python directly.
+Launching the console
+=====================
 
+Assuming an uneventful :ref:`installation process <install_quickstart>`, you can now launch ``YaPyCon`` by selecting
+"Python Console" from YASARA's top level "Window" menu option.
+
+.. image:: resources/figures/fig_showing_option_focused.png
+
+This console is identical to an IPython session, providing a Python language shell which executes Python directly.
 This console however has minor knowledge of the fact that it was launched as a YASARA plugin. You can still
-execute arbitrary Python code in it (e.g. ``3+2``) but you cannot interact with YASARA...yet.
+execute arbitrary Python code in it (e.g. ``3+2``) but you cannot interact with YASARA until you have imported the
+``yasara_kernel`` module (please see :ref:`func_typical_use`).
 
-To achieve this, you should first import the ``yasara_kernel.py`` module. This is usually the first thing to import
-with a simple:
+
+When "Python Console" is not available
+======================================
+
+The main reason for YaPyCon to not show up as an option under "Window" within YASARA is to fail to load one of its
+dependencies.
+
+This can happen because of two reasons:
+
+1. A suitable Python virtual environment was not activated prior to starting YASARA.
+
+2. A Python virtual environment was activated but it did not contain YaPyCon's requirements. That is,
+   ``PyQt5, rpyc, qtconsole`` and ``IPython``.
+
+
+Terminating the console
+=======================
+
+The console appears like any other application window, so, to close it, simply click on the ``X`` at the top right-hand
+side of the window *or* type ``exit``, just as you would in any shell.
+
+
+.. _func_typical_use:
+
+Typical use of the console
+==========================
+
+Once the console is launched, it can perform any kind of computation a typical Python console would but it is not yet
+"linked" with the YASARA instance that launched it. To do that, you should first import the ``yasara_kernel.py`` module.
+
+This is usually the first thing to import in the console window, with a simple:
 
 ::
 
@@ -46,12 +82,6 @@ of the function.
     YASARA's documentation system is accessible from within YASARA by pressing Space (to bring up the Yanaconda console)
     and then typing ``Help`` followed by a particular command. (e.g. ``Help LoadPNG``).
 
-Terminating the console
-=======================
-
-The console appears like any other application window, so, to close it, simply click on the ``X`` at the top right-hand
-side of the window or type ``exit``, just as you would in any shell.
-
 
 Caveats
 =======
@@ -70,19 +100,3 @@ Caveats
 
    .. thumbnail:: resources/figures/fig_plugin_timeout.png
 
-
-.. Accessing the Jupyter Kernel
-.. ============================
-..
-.. When you start the Python console, you are actually starting a Jupyter kernel and connect to it too. This kernel
-.. is exposed to the system and it can be accessible via a Jupyter notebook too, which makes for some very useful ways
-.. of interacting with YASARA.
-..
-.. To connect your Jupyter notebook to a running instance of YASARA:
-..
-.. 1. Launch YASARA
-.. 2. Launch the console
-.. 3. Launch a Jupyter notebook on the same computer
-.. 4. Try to connect to an existing kernel
-.. 5. Choose the one that is suggested by the notebook.
-.. 6. You are now connected to the same kernel (and its context) via the jupyter notebook.

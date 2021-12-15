@@ -43,7 +43,7 @@ if exist "%YASARA_HOME%\plg\yapycon.py" (
 
 :: Everything looks good, go ahead with the installation in /plg
 copy "yapycon\yapycon.py" "%YASARA_HOME%\plg\"
-copy "yapycon\yasara_kernel.py" "%YASARA_HOME$\plg\"
+copy "yapycon\yasara_kernel.py" "%YASARA_HOME%\plg\"
 :: Inform and exit
 echo YaPyCon and the associated yasara_kernel.py module were succesfully installed.
 echo.

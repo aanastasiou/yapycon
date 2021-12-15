@@ -14,22 +14,46 @@ Read this section if:
 * You already know what *"Python"* and *"virtual environment"* are 
   and you can start YASARA with a specific virtual environment activated first.
 
+For more details on the installation process, please see section :ref:`installation_install_from_scratch`.
+
 
 Installation
 ------------
 
-1. Create a virtual environment and install ``requirements.txt``
+1. Download the
+   `latest release of YaPyCon <https://github.com/aanastasiou/yapycon/releases/latest/download/yapycon.zip>`_ (or
+   `clone the repository <https://github.com/aanastasiou/yapycon/>`_).
 
-2. Drop to a *terminal* and activate your environment
+2. Decompress ``yapycon.zip`` to a directory on your computer.
 
-3. Navigate to the directory where you downloaded YaPyCon and run the ``install_plugin``
+3. Create a new Python virtual environment that includes YaPyCon's requirements (see ``requirements.txt`` from
+   ``yapycon.zip``).
 
-4. From the same terminal launch YASARA
+   * Or ensure that the virtual environment of your choice includes the packages listed in ``requirements.txt``.
+
+4. Ensure that the environment variable ``YASARA_HOME`` points to the top level directory where YASARA is installed.
+
+   * This is the directory that you launch the YASARA executable (``yasara`` or ``yasara.exe``) from.
+   * *In Linux*, this can be set with:
+     ::
+
+         > export YASARA_HOME=some/directory/yasara
+
+   * *In MS Windows:* Bring up your "Environment Variables" dialog, from "System Properties" (Open your start menu
+     and look for "Edit the system environment variables". That set of dialogs looks like this:
+
+     .. thumbnail:: resources/figures/fig_win_env_vars_latest.png
+
+5. Run ``install_plugin`` from the *decompressed* YaPyCon release archive.
+
+6. Drop to a terminal, activate the Python environment and launch YASARA.
 
 If everything has gone well, you will see a *"Python Console"* option added under the *"Window"* menu option:
 
 .. thumbnail:: resources/figures/fig_showing_option.png
 
+
+.. _installation_install_from_scratch:
 
 Installing from scratch
 =======================
@@ -54,10 +78,10 @@ Install YASARA
   necessary pre-requisites installed. This is achieved in the following steps.
      
 
-Install Python or virtual environment.
---------------------------------------
+Install Python or a virtual environment
+---------------------------------------
 
-1. On **MS Windows:**, the quickest option would be to install some "flavour" of 
+1. On **MS Windows:**, the quickest option would be to install some "flavour" of
    `conda <https://docs.conda.io/en/latest/index.html>`_
    
 2. On **Linux:**, the quickest option would be to use `virtualenv <https://wiki.python.org/moin/Virtualenv>`_
@@ -79,4 +103,10 @@ If your system now includes a working YASARA installation with a properly prepar
 now ready to install and launch ``YaPyCon``.
 
 The steps to do this are identical to the description in :ref:`install_quickstart`
+
+
+Removing YaPyCon
+================
+
+To uninstall YaPyCon, simply run the script ``uninstall_plugin`` from the *decompressed* YaPyCon release archive.
 

@@ -4,6 +4,12 @@
 Examples
 ========
 
+The source code of the following code examples can be copied right from this page (to be pasted to YaPyCon, for
+example), by clicking on the clipboard icon at the top right-hand corner of the source code box.
+
+The icon appears when the mouse pointer hovers over the example's source code.
+
+
 ``Hello World``: YaPyCon Edition
 ================================
 
@@ -43,8 +49,9 @@ certain functionality to YASARA. The *"View"* stage is the entry level with all 
 
 Obtaining a screenshot
 ======================
-YASARA offers a number of ways by which screenshots can be produced from within the program itself ranging from a
-straightforward screenshot of the current state of the user interface, to high resolution renderings
+YASARA offers a number of ways by which screenshots can be produced from within the program itself.
+
+These range from a straightforward screenshot of the current state of the user interface, to high resolution renderings
 (via `POV-Ray <https://www.povray.org/>`_), to 3D formats such as point clouds,
 `Wavefront <https://en.wikipedia.org/wiki/Wavefront_.obj_file>`_ objects and STL files for 3D printing.
 
@@ -67,8 +74,9 @@ function. Normally, ``SavePNG()`` would return the result of the command, but wh
 same command will return a numpy array with the screenshot that was just saved from YASARA (**if matplotlib is available
 in the currently active Python environment**).
 
-This small modification, combined with the "magic" command ``%matplotlib inline`` enable the Python console to
-display the image very conveniently within the console itself.
+This small modification, combined with the
+`"magic" command <https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-matplotlib>`_
+``%matplotlib inline``, enables the Python console to display the image very conveniently within the console itself.
 
 Creating animated GIFs
 ----------------------
@@ -80,6 +88,9 @@ This is a plain simple re-creation of the built in demo of creating an animated 
 This script will produce the following animated gif:
 
 .. figure:: resources/figures/1crn_rotating.gif
+
+The resulting GIF from this example (``1crn_rotating.gif``) is stored in the user's home directory whatever that might
+be depending on the platform.
 
 
 Exporting data in different formats
@@ -106,7 +117,12 @@ a graph and visualising it.
 .. note ::
     The following code, requires the module ``networkx`` to be installed in the activated Python environment.
 
-    ``networkx`` can be installed from PyPi via a simple: ``pip install networkx``.
+    ``networkx`` can be installed from PyPi via a simple:
+    ::
+
+        > pip install networkx
+
+
 
 .. literalinclude:: resources/code_examples/yapycon_export_graphml.py
 
@@ -129,6 +145,6 @@ structure of a given molecule but this functionality is *not available at the YA
 
 
 
-.. [#] Sanity checks are applied at different levels and "stages". The entry level stage, YASARA View, preforms 4
+.. [#] Sanity checks are applied at different levels and "stages". The entry level stage, YASARA View, performs 4
        standard checks as part of the ``LoadPDB`` command but the ``Clean`` command of the YASARA Model stage, performs
        39 checks to counteract a variety of known data quality issues.

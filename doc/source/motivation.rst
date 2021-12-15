@@ -11,8 +11,8 @@ To understand better what this overhead "problem" is, it is essential to underst
 YASARA and its scripting capability
 -----------------------------------
 
-YASARA is an excellent piece of software to carry out a large (and ever expanding) number of bio-informatics related
-tasks...and more. Its acronym *"Yet Another Scientific Reality Application"* is not at all a marketing
+YASARA is an excellent piece of software to carry out a large (and ever expanding) number of bio-informatics tasks.
+Its acronym *"Yet Another Scientific Reality Application"* is not at all a marketing
 "creative exaggeration". It really does, to the extent that it is possible and accurate, turn a computer or cluster
 of computers, into a virtual laboratory. A laboratory where the user has direct access to a long list of methods
 often developed by original research carried out by YASARA Biosciences staff [#]_.
@@ -36,7 +36,7 @@ seem alien at first, especially if you try to employ data structures that are sl
 a simple variable.
 
 YASARA also has a very simple (and effective) support for launching **and interfacing** with Python plugins. This
-capability however is very tightly coupled with Yanaconda.
+capability however is tightly coupled with Yanaconda.
 
 YASARA will basically launch a new Python process (selecting the currently active Python interpreter), that executes
 the plugin script. Everything within the plugin script is familiar Python code and the script itself can import other
