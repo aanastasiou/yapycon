@@ -24,7 +24,7 @@ This can be achieved as follows:
 Accessing YASARA's pre-defined variables for plugins
 ====================================================
 
-Plugins can access :ref:`a number of predefined variables <_plugin_predef>` that are made available to them from
+Plugins can access :ref:`a number of predefined variables <plugin_predef>` that are made available to them from
 the main program and all of them can be accessed from the console.
 
 For example, go ahead and check the ``owner`` information that is hard-coded in the software for you. In my case,
